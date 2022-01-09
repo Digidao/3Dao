@@ -1,0 +1,566 @@
+<html lang="en"><head><meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<style type="text/css">@font-face {
+  font-family: "curvy";
+  src: url("./fonts/strasua.ttf");
+  }
+  body {
+  margin:0;
+  background-image: url("./images/background.jpg") ;
+  font-family: "curvy", Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+  }
+
+  .container {
+    position: relative;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: inherit;
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+   p{
+    word-break: break-all;
+    }
+
+  .button {
+    color: white;
+    padding: 3px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    float:right;
+    vertical-align: middle;
+
+    }
+  .button:hover {
+      background-color: yellow;
+      color: #0000ff;
+      font-weight:bold;
+    }
+
+  .navbar {
+    color: white;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    background-color: transparent;
+
+  }
+
+  .navbar a {
+    float: left;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 9px;
+    text-decoration: none;
+  }
+
+  .section {
+    height: 100vh;
+    width: 100%;
+    }
+
+  .subnav {
+    float: right;
+    font-size: 20px;
+    overflow: hidden;
+  }
+
+  .navbar a:hover, .subnav:hover .subnavbtn {
+    color: #0000ff;
+  }
+
+  .big{
+    font-size: 60px;
+    background-color: inherit;
+    font-family: inherit;
+    color:white;
+    text-align: left;
+
+  }
+
+  .banner{
+    font-size: 50px;
+    margin:10;
+
+    background-color: inherit;
+    font-family: Arial, Helvetica, sans-serif;
+    color:white;
+    text-align: left;
+  }
+
+  .header {
+    font-size: 32px;
+    background-color: inherit;
+    font-family: inherit;
+    color:white;
+    margin:10;
+
+  }
+
+  .text {
+    font-size: 16px;
+    background-color: inherit;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    margin:10;
+  }
+  .roadmaptext{
+    font-size: 26px;
+    font-family: Arial, Helvetica, sans-serif;
+
+  }
+
+  .smalltext{
+   font-size: 12px;
+   float: center;
+   font-family: Arial, Helvetica, sans-serif;
+   color:white;
+   text-align: center;
+   }
+
+  .span{
+    font-size: 16px;
+    background-color: inherit;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin:10;
+  }
+
+  ul {
+    list-style-type: none
+  }
+
+  li {
+    display: table;
+    justify-content: start;
+    list-style: outside;
+    margin:10;
+
+  }
+
+  .bigbox1 {
+    width:50%;
+    vertical-align: middle;
+  }
+
+  .bigbox2{
+    width:50%;
+    vertical-align: middle;
+  }
+  li::before {
+    content: "*";
+    font-size: 18px;
+    color: yellow;
+  }
+
+  @media only screen and (max-width:800px) {
+  /* For tablets: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+  .text{
+    font-size: 16px;
+
+  }
+  .span{
+    background-color: inherit;
+    font-family: inherit;
+    color: white;
+    text-align: center;
+
+    }
+
+  .
+  .banner{
+    font-size: 18px;
+  }
+  .header {
+    font-size: 20px;
+
+  }
+  .subnav {
+    padding: 0px 0px;
+    display: flex;
+    overflow: hidden;
+  }
+  .navbar {
+    background-color: #0000ff;
+    color:white;
+    padding: 0px 0px;
+    display: flex;
+    width:100%;
+  }
+  .navbar a {
+    float: center;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 0px;
+    text-decoration: none;
+  }
+
+  .button {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    float:center;
+    vertical-align: middle;
+    }
+    img {
+     display: none;
+
+  }
+  .active {
+      display:none;
+  }
+  .bigbox1 {
+    width:auto;
+    vertical-align: end;
+  }
+
+  .bigbox2{
+    display: none;
+    vertical-align: middle;
+  }
+  .roadmaptext{
+    font-size: 20px;
+
+  }
+  }
+  @media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+  .text{
+    font-size: 12px;
+
+  }
+  .span{
+    background-color: inherit;
+    font-family: inherit;
+    color: white;
+    text-align: center;
+
+    }
+
+  .
+  .banner{
+    font-size: 18px;
+  }
+  .header {
+    font-size: 20px;
+
+  }
+  .subnav {
+    padding: 0px 0px;
+    display: flex;
+    overflow: hidden;
+  }
+  .navbar {
+    background-color: #0000ff;
+    color:white;
+    padding: 0px 0px;
+    display: flex;
+    width:100%;
+  }
+  .navbar a {
+    float: center;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 0px;
+    text-decoration: none;
+  }
+
+  .button {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    float:center;
+    vertical-align: middle;
+    }
+    img {
+     display: none;
+
+  }
+  .active {
+      display:none;
+  }
+  .bigbox1 {
+    width:auto;
+    vertical-align: end;
+  }
+
+  .bigbox2{
+    display: none;
+    vertical-align: middle;
+  }
+  .roadmaptext{
+    font-size: 20px;
+
+  }
+  }
+	</style>
+</head>
+<body>
+<div class="navbar"><a class="active" href="#home"><img align="center" height="100" src="./images/3dao.png" width="100"></a>
+<div class="subnav">
+<div class="button"><a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0x657F5b47C97b7475fe5EF683958942Ab0Fd79a1A">Exchanges</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="https://github.com/Digidao/Digitrade">Github</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#roadmap">Roadmap</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#digidao">3DAO</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#tokenomics">Tokenomics</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#usecase">Usecase</a></div>
+</div>
+</div>
+
+<div class="section">
+<div id="home">
+<table style="height: 100vh; background-color: inherit; border: none; margin:20;  border-spacing:30px 10px;
+">
+	<tbody>
+		<tr>
+			<td class="bigbox1">
+			<div class="banner"><b>The democratic union of<br>
+			smart contract investors.</b></div>
+
+			<div class="text">A digital experiment in representative democracy and capitalism.</div>
+			</td>
+			<td class="bigbox2">
+			<div class="container"><img height="460" src="./images/cool.gif" width="460">
+			<div class="centered">
+			<div class="container"><img src="./images/backImage.png"></div>
+			&nbsp;
+
+			<div class="smalltext"><u>Decentralized Democratic Autonomous Organization</u></div>
+			</div>
+			</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p></p>
+
+<div class="section">
+<div id="usecase">
+<table style="width:100%;  height: 100vh; background-color: inherit; border: none; margin:20; border-spacing:30px 10px">
+	<tbody>
+		<tr>
+			<td class="bigbox1">
+			<div class="text">
+			<div class="header" style="padding: 10px;">Some possible usecases</div>
+
+			<ul>
+				<li>Restaurant / Grocer delivery.</li>
+				<li>Retail / Food &amp; Beverage impulse sales in the entertainment industry.</li>
+				<li>Investing in other cryptocurrencies.</li>
+				<li>Investing in real estate.</li>
+				<li>Funding human travel to Alpha Centauri and beyond.</li>
+				<li>All of the above and anything else the DAO votes to pursue.</li>
+			</ul>
+			</div>
+			&nbsp;
+			</td>
+			<td class="bigbox2">
+			<div class="big" style="text-align: center;vertical-align: middle;">
+			<p><b>Usecase</b></p>
+			</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p></p>
+
+<p></p>
+
+<div class="section">
+<div id="tokenomics">
+<table style="width:100%;  height: 100vh; background-color: inherit; border: none; margin:20;">
+	<tbody>
+		<tr>
+			<td class="bigbox2">
+			<div class="big" style="text-align: center;">
+			<p><b>Tokenomics</b></p>
+			</div>
+			</td>
+			<td class="bigbox1">
+			<div class="header">Specs</div>
+
+			<div class="text">Symbol: <span style="color: yellow"> 3DAO</span></div>
+
+			<div class="text">Total Supply: <span style="color: yellow"> 100,000,000 3DAO</span></div>
+
+			<div class="text">Current Burnate: <span style="color: yellow"> 1.11%</span></div>
+
+			<div class="text">Current Treasury: <span style="color: yellow"> 25,000,000 3DAO</span></div>
+
+			<div class="text">Representative Maturation Time: <span style="color: yellow"> about 30 days</span></div>
+
+			<div class="text">Passed Proposals: <span style="color: yellow"> 0</span></div>
+
+			<div class="text">Current Proposals: <span style="color: yellow"> 0</span></div>
+
+			<div class="text">Standard Staking Reward: <span style="color: yellow"> 5% APR</span></div>
+
+			<div class="text">Sponsor Bonus: <span style="color: yellow"> 3% APR</span></div>
+
+			<div class="text">Alt-Sponsor Bonus:<span style="color: yellow"> 1000 3DAO</span></div>
+
+			<div class="text">Governance: <span style="color: yellow"> Represenative(1 address = 1 vote)</span></div>
+
+			<div class="text">Exchanges: <a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0x657F5b47C97b7475fe5EF683958942Ab0Fd79a1A">Polygon</a></div>
+			</td>
+			<td>
+			<div class="header">Networks</div>
+
+			<div class="text"><b>Polygon</b></div>
+
+			<div class="text"><a href="https://polygonscan.com/address/0x6ff67f62A25218623A9Db6769742C8A2ce3B63d6">DigiToken contract</a></div>
+
+			<div class="text">Governance Contract</div>
+
+			<div class="text">Coming soon</div>
+			&nbsp;
+
+			<div class="text">Operator Contract</div>
+
+			<div class="text">Coming soon</div>
+			&nbsp;
+
+			<div class="text"><b>Binance Smart Chain</b></div>
+
+			<div class="text">Coming soon</div>
+			&nbsp;
+
+			<div class="text"><b>Solana</b></div>
+
+			<div class="text">Coming soon</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p></p>
+
+<p></p>
+
+<div class="section">
+<div id="digidao">
+<table style="width:100%;  height: 100vh;   background-color: inherit; border: none; margin:20;">
+	<tbody>
+		<tr>
+			<td class="bigbox1">
+			<div class="text">
+			<ul>
+				<li>One address equals one vote.</li>
+				<li>Represenative(Rep) eligibility requires holding 10K+ tokens for 30 days.</li>
+				<li>Reps with 100K or more tokens can sponsor proposals.</li>
+				<li>Reps with less then 100k DGT can partially sponsor proposals.</li>
+				<li>Fully funded(85%) proposals gain a % bonus if proposal passes, is enacted and completed.</li>
+				<li>Partially funded proposals gain 2500 DGT if the proposal passes, is enacted and completed.</li>
+				<li>Max proposal amount = (2% current treasury) * current treasury/original treasury amount .</li>
+				<li>Cancelled enacted proposals are penalized 10% which go into the treasury.</li>
+				<li>Stakers receive 100% of the stake back if a sponsor cancels a proposal.</li>
+				<li>Any proposals that could be considered illegal will be vetoed.</li>
+				<li>Digi powers expire 180 days after launch.</li>
+				<li>180 days after launch, 10 elected Digi-Senators will replace the Digi.</li>
+				<li>All by-laws may be changed by a vote if representives vote to do so.</li>
+			</ul>
+			</div>
+			</td>
+			<td class="bigbox2">
+			<div class="big" style="text-align: center;">
+			<p><b>Digitrade DAO</b></p>
+			</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p></p>
+
+<p></p>
+
+<div class="section">
+<div id="roadmap">
+<table style="width:100%;  height: 100vh;  background-color: inherit; border: none; margin:20;">
+	<tbody>
+		<tr>
+			<td class="bigbox2">
+			<div class="big" style="text-align: center;">
+			<p><b>Roadmap</b></p>
+			</div>
+			</td>
+			<td class="bigbox1" style="margin-top:60;">
+			<div class="roadmaptext" style="margin-top:60;"><img height="25px" src="./images/check.png" width="25px"><span style="color: yellow"> Launch
+			<img height="25px" src="./images/rocket.png" width="25px">
+			<img height="25px" src="./images/rocket.png" width="25px">
+			<img height="25px" src="./images/rocket.png" width="25px"> 01-06-2021</span></div>
+
+			<div class="roadmaptext" style="margin-top:60;"><br>
+			<span style="color: white">Governance contract<img height="25px" src="./images/governance.jpg" width="25px">1-13-2021</span></div>
+
+			<div class="roadmaptext" style="margin-top:60;"><br>
+			<span style="color: white">Operator contract<img height="25px" src="./images/operator.png" width="25px">1-20-2022</span></div>
+
+			<div class="roadmaptext" style="margin-top:60;"><br>
+			<span style="color: white">Digitrade Android App<img height="25px" src="./images/android.png" width="25px">1-27-2022</span></div>
+
+			<div class="roadmaptext" style="margin-top:60;"><br>
+			<span style="color: white">Voting begins<img height="25px" src="./images/liberty.png" width="25px">2-03-2022</span></div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p></p>
+
+</body></html>

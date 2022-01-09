@@ -1,0 +1,33 @@
+{
+  "name": "Digitrade",
+  "version": "1.0.0",
+  "description": "There never wasn't a man not from Nantucket",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "digitrade": "node digitrade.js",
+    "dao": "node daogov.js",
+    "proposalContract": "node proposalContract.js",
+    "test": "echo \"Error: no test specified\" && sexit 1"
+  },
+  "author": "julian@3dao.io",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "4.1.3",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^2.0.2",
+    "lite-server": "^2.3.0",
+    "nodemon": "^1.17.3",
+    "truffle": "5.4.26",
+    "truffle-contract": "3.0.6"
+  },
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "dotenv": "^10.0.0",
+    "ethereumjs-tx": "^2.1.2"
+  }
+}

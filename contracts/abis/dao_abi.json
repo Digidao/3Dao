@@ -1,0 +1,524 @@
+[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_block",
+				"type": "uint256"
+			}
+		],
+		"name": "Digichecked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "dtlcontract",
+				"type": "bool"
+			}
+		],
+		"name": "proposalResult",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_weeks",
+				"type": "uint256"
+			}
+		],
+		"name": "calculateReleaseBlock",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_releaseBlock",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkDigi",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkRegistration",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_unlockBlock",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_weeks",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_facilitator",
+				"type": "address"
+			}
+		],
+		"name": "enactProposal",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "get3DAOAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getDigiCheckBlock",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getDigitradeAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getStakePool",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getStandardBurn",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			}
+		],
+		"name": "initializeProposal",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "points",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "minimumVotingPeriod",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposalContracts",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposals",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "proposer",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "basic_description",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "yesVotes",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "noVotes",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startVoteBlock",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endVoteBlock",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "proposalCost",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "voteEnded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "votePass",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "enacted",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "initializationPoints",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "initialized",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "detailedDescription",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_dgtCost",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_votePeriod",
+				"type": "uint256"
+			}
+		],
+		"name": "propose",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "proposers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "proposer",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "basic_description",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "yesVotes",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "noVotes",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startVoteBlock",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endVoteBlock",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "proposalCost",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "voteEnded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "votePass",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "enacted",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "initializationPoints",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "initialized",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "set3DAOAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "digitoken",
+				"type": "address"
+			}
+		],
+		"name": "setDigitradeAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_rep",
+				"type": "address"
+			}
+		],
+		"name": "setRepAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "pool",
+				"type": "address"
+			}
+		],
+		"name": "setStakePool",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "stakePoolAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			}
+		],
+		"name": "tallyProposal",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "_result",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			}
+		],
+		"name": "veto",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "yes",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "no",
+				"type": "bool"
+			}
+		],
+		"name": "vote",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
