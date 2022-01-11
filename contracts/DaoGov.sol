@@ -48,30 +48,31 @@ interface InterfaceReps {
 
 }
 
+interface InterPool{
+    function getMaxAvailiableTokens() external view returns(uint);
+}
+
 contract DaoGov is SafeMath{
-    address tokenAddress;
-    address digitradeCreator;
-    address governance;
-    address representative;
-    uint public minimumVotingPeriod;
-    address [] public proposalContracts;
-    uint proposalContractID;
+    address tokenAddress; // Address of digitoken
+    address digi; //Address of digitoken creator
+    address governance; //This address
+    address pool; //Address of pool
+    address representative;  //Address where represenative information is stored
+    uint public minimumVotingPeriod; //Minimum time allotted for voting on a proposal
+    address [] public proposalContracts; //An Array of enacted proposal contracts
+    uint proposalContractID; //The ID of each proposal contract
     event proposalResult(uint _proposal, bool dtlcontract);
-    event Digichecked(uint _block);
-    uint DigiCheckBlock;
-    uint FullProposerBonus;
-    uint PartialProposerBonus;
-    uint treasuryReturn;
-    uint proposalIntializationThreshold;
-    uint currentTreasury;
-    uint treasury;
+    uint resignBlock; //block digi loses all special rights and system becomes truly decentralized.
+    uint poolReturn; //Standard amount of return due each month or each transaction for ProfitOrientedContract
+    uint proposalIntializationThreshold; //Required amount of voting power to allow full voting on a proposal
+    uint currentpool; //The current pool
+    uint startingPool; //The starting pool
 
     struct Proposal {
         address proposer;
         string basic_description;
         uint yesVotes;
         uint noVotes;
-        uint startVoteBlock;
         uint endVoteBlock;
         uint proposalCost;
         address [] alreadyVoted;
@@ -82,6 +83,7 @@ contract DaoGov is SafeMath{
         bool initialized;
         address [] initializers;
         uint proposalType;
+        bool active;
     }
 
     mapping(address => Proposal )  public proposers;
@@ -90,53 +92,27 @@ contract DaoGov is SafeMath{
     constructor(){
         minimumVotingPeriod = 10; //(Change to 70000)minimum blocks(Around 7 days) voting is allowed on proposal
         proposalIntializationThreshold = 1000000 *10 *18; //1000000 DGT 1% of total supply
-        digitradeCreator = 0x0000000000000000000000000000000000000000;
-        FullProposerBonus = 5;      //  5% of proposal cost bonus for EcosystemInprovementContract
-        PartialProposerBonus = 2500;   //  2500 DGT
-        treasuryReturn = div(11,100); //  Standard 1.11% of ProfitOrientedContract due monthly or per transaction
-        treasury = 20_000_000e18; //Treasury for proposals
+        digi = 0x0000000000000000000000000000000000000000;
+        poolReturn = div(11,100); //  Standard 1.11% of ProfitOrientedContract due monthly or per transaction
+        startingPool = 20_000_000e18; //pool for proposals
+        pool = 0x0000000000000000000000000000000000000000;
         tokenAddress = 0x0000000000000000000000000000000000000000; //Address of DGT token
         representative = 0x0000000000000000000000000000000000000000; //Address of Reprensatives
         governance = address(this); //Governance Contract
-        DigiCheckBlock = add(block.number,1726272); //After 6 months digi address will no longer have any special rights
+        resignBlock;  //block digi loses all special rights and system becomes truly decentralized.= add(block.number,1726272); //After 6 months digi address will no longer have any special rights
 
 
     }
 
     modifier onlyDIGI(){
-        require(msg.sender == digitradeCreator);
+        require(msg.sender == digi);
         _;
     }
     modifier DIGIcheck{
-        require(block.number < DigiCheckBlock,"DIGI no longer has any priviledges");
+        require(block.number < resignBlock, "DIGI no longer has any priviledges");
         _;
 
     }
-
-    function getMaxAvailiableTokens() public view returns(uint){
-        uint devFund = InterfaceDigi(tokenAddress).getDevFund();
-        currentTreasury == devFund;
-        uint availiableTokens = (div(1,50)) * (currentTreasury*currentTreasury) / treasury;
-        return availiableTokens;
-    }
-
-    function getTreasuryReturn() public view returns (uint){
-        return treasuryReturn;
-    }
-
-    function getDigiCheckBlock() public view returns(uint){
-        return DigiCheckBlock;
-    }
-
-    function getDigitradeAddress() public view returns(address){
-        return tokenAddress;
-    }
-
-    function get3DAOAddress() public view returns(address) {
-        return governance;
-    }
-
-
     modifier onlyVestedReps(){
        require(InterfaceDigi(tokenAddress).balanceOf(msg.sender) > InterfaceReps(representative).getRepMin(), "Not enough digitrade tokens");
        require(msg.sender == InterfaceReps(representative).getRep(),"You are not a rep" );
@@ -160,6 +136,22 @@ contract DaoGov is SafeMath{
       _;
     }
 
+    function getMaxAvailiableTokens() public view returns (uint){
+        return InterPool(pool).getMaxAvailiableTokens();
+    }
+
+    function getpoolReturn() public view returns (uint){
+        return poolReturn;
+    }
+    function getDigiCheckBlock() public view returns(uint){
+        return resignBlock;
+    }
+    function getDigitradeAddress() public view returns(address){
+        return tokenAddress;
+    }
+    function getDaoGovAddress() public view returns(address) {
+        return governance;
+    }
 
     function checkRegistration() public view returns(uint _unlockBlock, string memory){
         require(msg.sender == InterfaceReps(representative).getRep(), "You have not registered yet");
@@ -169,7 +161,6 @@ contract DaoGov is SafeMath{
           return ((InterfaceReps(representative).getUnlockBlock() - InterfaceReps(representative).getStartBlock()), 'more blocks until registration');
         }
     }
-      //VOTING PROCESS...
 
     function propose(string memory detailedDescription, uint256 _dgtCost, uint _votePeriod, uint _type) public onlyVestedReps{
         require((_dgtCost*10*18) < getMaxAvailiableTokens(), "Proposal cost exceeds 2% of avaliable tokens");
@@ -181,7 +172,6 @@ contract DaoGov is SafeMath{
                 basic_description: detailedDescription,
                 yesVotes: 0,
                 noVotes: 0,
-                startVoteBlock:block.number,
                 endVoteBlock: add(_votePeriod,block.number),
                 proposalCost: _dgtCost,
                 alreadyVoted:iVoted,
@@ -191,7 +181,8 @@ contract DaoGov is SafeMath{
                 initializationPoints: 0,
                 initialized:false,
                 initializers:iVoted,
-                proposalType:_type
+                proposalType:_type,
+                active:false
             }));
     }
 
@@ -260,31 +251,19 @@ contract DaoGov is SafeMath{
         return _releaseBlock;
     }
 
-    function enactProposal(
-        uint _proposal,
-        uint _weeks,
-        address _facilitator
-        )
+    function enactProposal(uint _proposal,uint _weeks)//,address _facilitator)
         public  onlyProposalSponsor(_proposal) returns (address) {
         require(_weeks > 0," Proprosal needs at least 1 week to be completed");
         require(proposals[_proposal].votePass = true, "The vote did not pass");
         uint proposerBalance = InterfaceDigi(tokenAddress).balanceOf(msg.sender);
         require(proposerBalance >= proposals[_proposal].proposalCost,"Your DGT balance is < than the amount needed to enact proposal");
-        uint _releaseBlock = calculateReleaseBlock(_weeks);
+        //uint _releaseBlock = calculateReleaseBlock(_weeks);
         address newContractAddress;
 
         if(proposals[_proposal].proposalType ==0){
         proposalContractID = proposalContractID ++;
 
-        EcosystemImprovementContract newContract = new EcosystemImprovementContract(
-        proposalContractID,
-        proposals[_proposal].proposer,
-        proposals[_proposal].proposalCost,
-        _facilitator,
-        _releaseBlock,
-        digitradeCreator,
-        governance,
-        tokenAddress);
+        EcosystemImprovementContract newContract = new EcosystemImprovementContract();
         newContractAddress = address(newContract);
         proposalContracts.push(address(newContract));
         }
@@ -292,25 +271,14 @@ contract DaoGov is SafeMath{
         if(proposals[_proposal].proposalType ==1){
         proposalContractID = proposalContractID ++;
 
-        //ProfitOrientedContract newContract = new ProfitOrientedContract(
-        //proposalContractID,
-        //proposals[_proposal].proposer,
-        //proposals[_proposal].proposalCost,
-        //_facilitator,
-        //_releaseBlock,
-        //digitradeCreator,
-        //DAO,
-        //tokenAddress,
-        //stakePoolAddress);
-        //newContractAddress = address(newContract);
-        //proposalContracts.push(address(newContract));
+        ProfitOrientedContract newContract = new ProfitOrientedContract();
+        newContractAddress = address(newContract);
+        proposalContracts.push(address(newContract));
         }
 
 
         return newContractAddress;
     }
-
-    //END VOTING PROCESS
 
 }
 
@@ -318,168 +286,13 @@ interface InterfaceDaoGov {
   function getStakePool() external view returns (address);
   function getDIGI() external view returns (address);
   function getDigiCheckBlock() external view returns (uint);
-  function get3DAOAddress() external view returns (address);
+  function getDaoGovAddress() external view returns (address);
   function getDigitradeAddress() external view returns (address);
 }
 
-contract ProfitOrientedContract is SafeMath{}
+contract ProfitOrientedContract is SafeMath{
+}
 
 contract EcosystemImprovementContract is SafeMath{
-  // need cosponsors
-    address DIGI;
-    uint DigiCheckBlock;
-    address public tokenAddress;
-    address public DAO;
-    address public proposer;
-    address public facilitator;
-    uint public proposalCost;
-    uint public releaseBlock;
-    bool public penalized;
-    bool enable;
-    uint burnAmount;
-    uint ID;
 
-    uint public proposerStake;
-    uint public otherStakers;
-    uint completionBlock;
-    uint timeOut;
-    bool public taskComplete;
-    address stakePoolAddress;
-    mapping(address => uint) balances;
-    mapping(address => proposalSponsors )  public sponsors;
-    proposalSponsors[] public sponsor;
-
-
-    struct proposalSponsors{
-    address sponsor;
-    uint balance;
-    }
-
-    event FundingNeeded(uint contractNumber, uint _amount, uint _timeRemaining);
-
-    event TaskComplete(string completionMessage, bool _completionStatus);
-
-
-    //TEAM STAKING
-    constructor(
-      uint _ID,
-      address _proposer,
-      uint _cost,
-      address _facilitator,
-      uint _releaseBlock,
-      address _DIGI,
-      address _DAO,
-      address _tokenAddress){
-        ID = _ID;
-        proposer = _proposer;
-        facilitator = _facilitator;
-        proposalCost = _cost;
-        releaseBlock = _releaseBlock;
-        DIGI = _DIGI;
-        DAO = _DAO;
-        tokenAddress = _tokenAddress;
-        completionBlock = safeSub(_releaseBlock , div(_releaseBlock,10));
-        enable = false;
-        penalized = false;
-
-    }
-
-    function sponsorBalance(address _sponsor) public  view returns (uint balance) {
-        return balances[_sponsor];
-    }
-
-    modifier DIGIcheck{
-        DigiCheckBlock = InterfaceDaoGov(DAO).getDigiCheckBlock();
-        require(block.number < DigiCheckBlock,"DIGI no longer has any priviledges");
-        _;
-
-    }
-    modifier onlyEnabled(){
-        require(enable == true);
-        _;
-    }
-    modifier onlyProposer(){
-        require(msg.sender == proposer);
-        _;
-    }
-    modifier onlyFacilitator(){
-        require(msg.sender == facilitator);
-        _;
-    }
-    modifier onlyDIGI(){
-        require(msg.sender == DIGI);
-        _;
-    }
-
-    function ProposerFundContract(uint _amount) public onlyProposer returns (string memory message, uint _completionBlock){
-        require(_amount <= proposalCost, "Sending more than agreed upon amount");
-        require(enable == false, "Proposal already enabled");
-        InterfaceDigi(tokenAddress).transferFrom(msg.sender, address(this) , _amount);
-        InterfaceDigi(tokenAddress).transfer(0x000000000000000000000000000000000000dEaD , mul(burnAmount,_amount));
-        enable = true;
-        proposerStake= safeSub(proposalCost,_amount);
-        if(proposerStake < _amount){
-            uint fundsNeeded = safeSub(_amount, proposerStake);
-            emit FundingNeeded(ID, fundsNeeded, completionBlock);
-        }
-        message = "Completion notification due by";
-        _completionBlock = completionBlock;
-        return (message, _completionBlock);
-    }
-
-    function DigiFundContract() public onlyDIGI DIGIcheck{
-        InterfaceDigi(tokenAddress).transfer(address(this),proposalCost);
-        enable = true;
-    }
-
-    function checkFunds() public view returns(uint){
-        return InterfaceDigi(tokenAddress).balanceOf(address(this));
-    }
-
-    function completionNotification(string memory message, bool _complete) public onlyFacilitator {
-      require(block.number < releaseBlock, "The time to complete the complete the proposal has passed");
-      taskComplete = _complete;
-      emit TaskComplete(message, _complete);
-      if(_complete == false){
-        cancel(message);
-      }
-    }
-
-    function releasePayments() public onlyFacilitator onlyEnabled{
-        require(block.number > releaseBlock, "The current block number is less than the release block");
-        InterfaceDigi(tokenAddress).transfer(facilitator,proposalCost);
-    }
-
-    function cancel(string memory reason) public onlyEnabled returns ( string memory _reason){
-        if(msg.sender == DIGI || msg.sender == facilitator){
-            require(block.number < releaseBlock);
-            InterfaceDigi(tokenAddress).transfer(proposer, proposerStake);
-            InterfaceDigi(tokenAddress).transfer(stakePoolAddress ,otherStakers);
-            //100% return of tokens to stakePoolAddress and proposer
-            enable = false;
-            _reason = reason;
-            return _reason;
-            }
-        if(msg.sender == proposer){
-            require(block.number < releaseBlock);
-            enable = false;
-            penalized = true;
-            proposerStake = mul((div(90,100)),proposerStake);
-            InterfaceDigi(tokenAddress).transfer(stakePoolAddress ,(otherStakers+(1*proposerStake)));
-            //100% return of tokens to stakePoolAddress but penalize proposer 10%
-            enable = false;
-            _reason = reason;
-            return _reason;
-            }
-
-    }
-
-    function collectProposerBenefit() public {
-
-    }
-
-    function returnPenalizedStake() public onlyProposer{
-            require(penalized == true, "You weren't penalized");
-            require(block.number > timeOut);
-            InterfaceDigi(tokenAddress).transfer(proposer,proposerStake);
-    }}
+}
