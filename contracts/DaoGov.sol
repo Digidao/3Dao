@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 
 contract SafeMath {
@@ -31,7 +31,7 @@ contract SafeMath {
         return c;    }
 }
 
-interface InterfaceDigi {
+interface Digi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function totalSupply() external view returns (uint);
     function transfer(address receiver, uint tokens) external returns (bool success);
@@ -39,8 +39,7 @@ interface InterfaceDigi {
     function getDevFund() external view returns(uint);
 }
 
-
-interface InterfaceReps {
+interface Reps {
     function getRepMin() external view returns (uint);
     function getRep() external view returns (address);
     function getUnlockBlock() external view returns (uint);
@@ -48,7 +47,7 @@ interface InterfaceReps {
 
 }
 
-interface InterPool{
+interface Pool{
     function getMaxAvailiableTokens() external view returns(uint);
 }
 
@@ -60,13 +59,10 @@ contract DaoGov is SafeMath{
     address representative;  //Address where represenative information is stored
     uint public minimumVotingPeriod; //Minimum time allotted for voting on a proposal
     address [] public proposalContracts; //An Array of enacted proposal contracts
-    uint proposalContractID; //The ID of each proposal contract
-    event proposalResult(uint _proposal, bool dtlcontract);
+    event proposalResult(uint _proposal, bool passed);
     uint resignBlock; //block digi loses all special rights and system becomes truly decentralized.
-    uint poolReturn; //Standard amount of return due each month or each transaction for ProfitOrientedContract
     uint proposalIntializationThreshold; //Required amount of voting power to allow full voting on a proposal
-    uint currentpool; //The current pool
-    uint startingPool; //The starting pool
+
 
     struct Proposal {
         address proposer;
@@ -91,17 +87,13 @@ contract DaoGov is SafeMath{
 
     constructor(){
         minimumVotingPeriod = 10; //(Change to 70000)minimum blocks(Around 7 days) voting is allowed on proposal
-        proposalIntializationThreshold = 1000000 *10 *18; //1000000 DGT 1% of total supply
+        proposalIntializationThreshold = 1_000_000e18; //1000000 DGT 1% of total supply
         digi = 0x0000000000000000000000000000000000000000;
-        poolReturn = div(11,100); //  Standard 1.11% of ProfitOrientedContract due monthly or per transaction
-        startingPool = 20_000_000e18; //pool for proposals
         pool = 0x0000000000000000000000000000000000000000;
         tokenAddress = 0x0000000000000000000000000000000000000000; //Address of DGT token
         representative = 0x0000000000000000000000000000000000000000; //Address of Reprensatives
         governance = address(this); //Governance Contract
-        resignBlock;  //block digi loses all special rights and system becomes truly decentralized.= add(block.number,1726272); //After 6 months digi address will no longer have any special rights
-
-
+        resignBlock = add(block.number,1726272); //(6 months from launch)block digi loses all special rights and system becomes truly decentralized.
     }
 
     modifier onlyDIGI(){
@@ -113,10 +105,10 @@ contract DaoGov is SafeMath{
         _;
 
     }
-    modifier onlyVestedReps(){
-       require(InterfaceDigi(tokenAddress).balanceOf(msg.sender) > InterfaceReps(representative).getRepMin(), "Not enough digitrade tokens");
-       require(msg.sender == InterfaceReps(representative).getRep(),"You are not a rep" );
-       require(block.number > InterfaceReps(representative).getUnlockBlock(), "UnlockBlock <  current block number");
+    modifier onlyReps(){
+       require(Digi(tokenAddress).balanceOf(msg.sender) > Reps(representative).getRepMin(), "Not enough digitrade tokens");
+       require(msg.sender == Reps(representative).getRep(),"You are not a rep" );
+       require(block.number > Reps(representative).getUnlockBlock(), "UnlockBlock <  current block number");
       _;
     }
     modifier onlyInitializedProposal(uint _proposal){
@@ -137,11 +129,7 @@ contract DaoGov is SafeMath{
     }
 
     function getMaxAvailiableTokens() public view returns (uint){
-        return InterPool(pool).getMaxAvailiableTokens();
-    }
-
-    function getpoolReturn() public view returns (uint){
-        return poolReturn;
+        return Pool(pool).getMaxAvailiableTokens();
     }
     function getDigiCheckBlock() public view returns(uint){
         return resignBlock;
@@ -154,17 +142,17 @@ contract DaoGov is SafeMath{
     }
 
     function checkRegistration() public view returns(uint _unlockBlock, string memory){
-        require(msg.sender == InterfaceReps(representative).getRep(), "You have not registered yet");
-        if(InterfaceReps(representative).getUnlockBlock()< block.number){
+        require(msg.sender == Reps(representative).getRep(), "You have not registered yet");
+        if(Reps(representative).getUnlockBlock()< block.number){
            return (1,'You are registered');
         }else{
-          return ((InterfaceReps(representative).getUnlockBlock() - InterfaceReps(representative).getStartBlock()), 'more blocks until registration');
+          return ((Reps(representative).getUnlockBlock() - Reps(representative).getStartBlock()), 'more blocks until registration');
         }
     }
 
-    function propose(string memory detailedDescription, uint256 _dgtCost, uint _votePeriod, uint _type) public onlyVestedReps{
+    function propose(string memory detailedDescription, uint256 _dgtCost, uint _votePeriod, uint _type) public onlyReps{
         require((_dgtCost*10*18) < getMaxAvailiableTokens(), "Proposal cost exceeds 2% of avaliable tokens");
-        require(_votePeriod > minimumVotingPeriod, "Not enough time to make potential voters aware of proposal");
+        require(_votePeriod > minimumVotingPeriod, "Not enough time for potential voters to become aware of proposal");
         require(_type < 2, "0 = EcosystemImprovementContract(EIC) 1 = ProfitOrientedContract(POC)");
         address[] memory iVoted;
         proposals.push(Proposal({
@@ -186,10 +174,10 @@ contract DaoGov is SafeMath{
             }));
     }
 
-    function initializeProposal(uint _proposal) public onlyVestedReps returns (string memory message, uint points){
+    function initializeProposal(uint _proposal) public onlyReps returns (string memory message, uint points){
       require(proposals[_proposal].initializationPoints < 1000000, "Proposal Already initialized");
       uint previousPoints = proposals[_proposal].initializationPoints;
-      uint addedPoints = InterfaceDigi(tokenAddress).balanceOf(msg.sender);
+      uint addedPoints = Digi(tokenAddress).balanceOf(msg.sender);
       uint currentPoints = add(previousPoints, addedPoints);
       proposals[_proposal].initializationPoints = currentPoints;
       if(currentPoints > proposalIntializationThreshold){
@@ -205,7 +193,7 @@ contract DaoGov is SafeMath{
         }
     }
 
-    function vote(uint _proposal, bool yes, bool no) public onlyVestedReps onlyInitializedProposal(_proposal) returns (string memory message){
+    function vote(uint _proposal, bool yes, bool no) public onlyReps onlyInitializedProposal(_proposal) returns (string memory message){
        for (uint i=0; i<proposals[_proposal].alreadyVoted.length; i++) {
        require(proposals[_proposal].alreadyVoted[i] != msg.sender, "Only one vote per address");}
        require(proposals[_proposal].endVoteBlock > block.number, "Voting has ended");
@@ -230,7 +218,7 @@ contract DaoGov is SafeMath{
         if(proposals[_proposal].yesVotes < proposals[_proposal].noVotes){
         proposals[_proposal].voteEnded = true;
         proposals[_proposal].votePass = false;
-        emit proposalResult(_proposal, true);
+        emit proposalResult(_proposal, false);
         delete proposals[_proposal];
         return false;
         }
@@ -250,26 +238,32 @@ contract DaoGov is SafeMath{
         _releaseBlock = block.number + (_weeks * 70000);
         return _releaseBlock;
     }
-
-    function enactProposal(uint _proposal,uint _weeks)//,address _facilitator)
+ /**  Inactive until 1/19/2022
+    function enactProposal(uint _proposal,uint _weeks,address _facilitator)
         public  onlyProposalSponsor(_proposal) returns (address) {
         require(_weeks > 0," Proprosal needs at least 1 week to be completed");
         require(proposals[_proposal].votePass = true, "The vote did not pass");
-        uint proposerBalance = InterfaceDigi(tokenAddress).balanceOf(msg.sender);
+        uint proposerBalance = Digi(tokenAddress).balanceOf(msg.sender);
         require(proposerBalance >= proposals[_proposal].proposalCost,"Your DGT balance is < than the amount needed to enact proposal");
-        //uint _releaseBlock = calculateReleaseBlock(_weeks);
+        uint _releaseBlock = calculateReleaseBlock(_weeks);
         address newContractAddress;
 
         if(proposals[_proposal].proposalType ==0){
-        proposalContractID = proposalContractID ++;
 
-        EcosystemImprovementContract newContract = new EcosystemImprovementContract();
+        DaoImprovementContract newContract = new DaoImprovementContract(
+            msg.sender,
+            proposals[_proposal].proposalCost,
+            _facilitator,
+            _releaseBlock,
+            digi,
+            representative,
+            tokenAddress,
+            pool);
         newContractAddress = address(newContract);
         proposalContracts.push(address(newContract));
         }
 
         if(proposals[_proposal].proposalType ==1){
-        proposalContractID = proposalContractID ++;
 
         ProfitOrientedContract newContract = new ProfitOrientedContract();
         newContractAddress = address(newContract);
@@ -279,11 +273,11 @@ contract DaoGov is SafeMath{
 
         return newContractAddress;
     }
-
+*/
 }
 
-interface InterfaceDaoGov {
-  function getStakePool() external view returns (address);
+interface Gov {
+  function getPool() external view returns (address);
   function getDIGI() external view returns (address);
   function getDigiCheckBlock() external view returns (uint);
   function getDaoGovAddress() external view returns (address);
@@ -291,8 +285,10 @@ interface InterfaceDaoGov {
 }
 
 contract ProfitOrientedContract is SafeMath{
+    //1/19/2022
 }
 
-contract EcosystemImprovementContract is SafeMath{
+contract DaoImprovementContract is SafeMath{
+    //1/19/2022
 
 }
