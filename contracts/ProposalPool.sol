@@ -34,7 +34,6 @@ interface InterfaceDigi {
     function totalSupply() external view returns (uint);
     function transfer(address receiver, uint tokens) external returns (bool success);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
-    function getDevFund() external view returns(uint);
 }
 
 interface InterfaceDaoGov {
@@ -50,7 +49,6 @@ interface InterfaceDaoGov {
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
     address digitrade;
-    address governance;
     address pool;
     uint proposalCost;
 
@@ -58,16 +56,13 @@ interface InterfaceDaoGov {
     uint treasury;
 
     constructor(
-        address _digitrade,
-        address _governance
+        address _digitrade
     ){
      digitrade = _digitrade;
-     governance = _governance;
      pool = address(this);
     }
 
     function collectProfit(address _proposer, uint tokens) external {
-        //require(msg.sender == InterfaceDaoGov(governance));
         balances[_proposer] = safeSub(balances[_proposer], tokens);
     }
 
