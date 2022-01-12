@@ -21,16 +21,16 @@ http://www.3dao.io
 
 <h1>Ropsten Test Network</h1>
 <h3>Digitrade Token</h3>
-<a href ="https://ropsten.etherscan.io/address/0x157Ad74590955CFfEad38F6Ec14c61e3eA42a617">0x157Ad74590955CFfEad38F6Ec14c61e3eA42a617</a>
+<a href ="https://ropsten.etherscan.io/address/0xCd32E15E0259d6875624E0172D7580B4B7F35538">0xCd32E15E0259d6875624E0172D7580B4B7F35538</a>
 
 <h3>3DAO Governance</h3>
-<a href ="https://ropsten.etherscan.io/address/0xc82d8D6ccA1baf94142c000D4d79fe66eC93aF22">0xc82d8D6ccA1baf94142c000D4d79fe66eC93aF22</a>
+<a href ="https://ropsten.etherscan.io/address/0x7F2800Ff1056Cb957BF589E23aC456ca6123Fa24">0x7F2800Ff1056Cb957BF589E23aC456ca6123Fa24</a>
 
 <h3>Representatives</h3>
-<a href ="https://ropsten.etherscan.io/address/0x23a319cf9248603726590eC01A844B26233611C6">0x23a319cf9248603726590eC01A844B26233611C6</a>
+<a href ="https://ropsten.etherscan.io/address/0xf2d313c228367f24CE2e8a414cA396E53dbE72dA">0xf2d313c228367f24CE2e8a414cA396E53dbE72dA</a>
 
 <h3>Proposal Pool</h3>
-<a href ="https://ropsten.etherscan.io/address/0xC1b53fA5D168Bf25e0C85CDc7E65Dc14c3bda676">0xC1b53fA5D168Bf25e0C85CDc7E65Dc14c3bda676</a>
+<a href ="https://ropsten.etherscan.io/address/0x59941493b0Ce064196EE006FA8472442d652360D">0x59941493b0Ce064196EE006FA8472442d652360D</a>
 
 <!---
 Digidao/Digidao is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
