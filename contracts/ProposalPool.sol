@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
-
+//circa 75% complete 1/11/2022
 contract SafeMath {
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -59,7 +60,6 @@ interface InterfaceDaoGov {
     constructor(
         address _digitrade,
         address _governance
-
     ){
      digitrade = _digitrade;
      governance = _governance;
@@ -105,14 +105,7 @@ interface InterfaceDaoGov {
 
     }
 
-    function transferToProposer(address proposer, uint tokens) public returns (bool success) {
-        require(msg.sender == proposer);
-        uint transferableAmount;
-        balances[proposer] = safeAdd(balances [proposer], tokens);
-        _poolSupply = _poolSupply - transferableAmount;
-        emit Transfer(msg.sender, proposer, tokens);
-        return true;
-    }
+
 
 
 }
