@@ -2,13 +2,13 @@
 http://www.3dao.io
 
 <h1>Polygon</h1>
-<h3>Digitrade Token</h3>
+✔<h3>Digitrade Token</h3>
 <a href ="https://polygonscan.com/address/"></a>
 
-<h3>3DAO Governance</h3>
+✔<h3>Representatives</h3>
 <a href ="https://github.com/Digidao/Digitrade/blob/main/README.md">0x</a>
 
-<h3>Representatives</h3>
+<h3>3DAO Governance</h3>
 <a href ="https://github.com/Digidao/Digitrade/blob/main/README.md">0x</a>
 
 <h3>Operations</h3>
@@ -16,9 +16,6 @@ http://www.3dao.io
 
 <h3>Proposal Pool</h3>
 <a href ="https://github.com/Digidao/Digitrade/blob/main/README.md">0x</a>
-
-
-
 
 
 
