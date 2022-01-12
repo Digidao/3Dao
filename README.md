@@ -24,13 +24,13 @@ http://www.3dao.io
 
 <h1>Ropsten Test Network</h1>
 <h3>Digitrade Token</h3>
-<a href ="https://ropsten.etherscan.io/address/0xDEB7937aCf37cE16fa91f39Aa814f3f35427a0E3">0xDEB7937aCf37cE16fa91f39Aa814f3f35427a0E3</a>
+<a href ="https://ropsten.etherscan.io/address/0xa85Dcda5e3841B82eEF7523C1A97FE8C22550199">0xa85Dcda5e3841B82eEF7523C1A97FE8C22550199</a>
 
 <h3>3DAO Governance</h3>
 <a href ="https://ropsten.etherscan.io/address/0xa9aB9750a4F16F145eD11dA1B453EF3EdDD3992C">0xa9aB9750a4F16F145eD11dA1B453EF3EdDD3992C</a>
 
 <h3>Representatives</h3>
-<a href ="https://ropsten.etherscan.io/address/0x5CDb913F5242279C6F790563FfAb7F1b13612A25c">0x5CDb913F5242279C6F790563FfAb7F1b13612A25</a>
+<a href ="https://ropsten.etherscan.io/address/0x3191F953988B0C70A70b1BDE34478b61A624d1F2">0x3191F953988B0C70A70b1BDE34478b61A624d1F2</a>
 
 <h3>Proposal Pool</h3>
 <a href ="https://ropsten.etherscan.io/address/0x4B564DE5959a47a048f23db787Fad8aB261cC234">0x4B564DE5959a47a048f23db787Fad8aB261cC234</a>
