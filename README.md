@@ -3,10 +3,10 @@ http://www.3dao.io
 
 <h1>Polygon</h1>
 <h3> Digitrade Token</h3> ✔ Token address
-<a href ="https://polygonscan.com/address/0x2BFd1C13323BE9274dd31596bDEFda573f4A32aB">0x2BFd1C13323BE9274dd31596bDEFda573f4A32aB</a>
+<a href ="https://polygonscan.com/address/0xb6903294d754175389bcba4b0f5955a964e317aa">0xb6903294d754175389bcba4b0f5955a964e317aa</a>
 
 <h3> Representatives</h3> ✔ Representative info address
-<a href ="https://polygonscan.com/address/0x2BFd1C13323BE9274dd31596bDEFda573f4A32aB">0xc4d35A57906A8eCca8D31b090dD8523551909f7A</a>
+<a href ="https://polygonscan.com/address/0xf2cEaC39177B3785aE8b2406c1dd03e1b546F3C8">0xf2cEaC39177B3785aE8b2406c1dd03e1b546F3C8</a>
 
 <h3>3DAO Governance</h3>
 <a href ="https://github.com/Digidao/Digitrade/blob/main/README.md">0x</a>
