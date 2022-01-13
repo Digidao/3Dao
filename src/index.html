@@ -6,25 +6,44 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 	<style type="text/css">@font-face {
   font-family: "curvy";
-  src: url("strasua.ttf");
+  src: url("./fonts/strasua.ttf");
   }
   body {
   margin:0;
-  background-image: url("background.jpg") ;
+  background-image: url("./images/background.jpg") ;
   font-family: "curvy", Arial, sans-serif;
   background-repeat: no-repeat;
   background-size: cover;
+
   }
+	li
+{
+    height : 25px;
+}
+
+.ul1>li
+{
+    margin-bottom : 0px;
+}
+
+.ul2>li
+{
+    margin-bottom : 5px;
+}
+
+.ul3>li
+{
+    margin-bottom : 5px;
+}
 
   a:link {
-  color: #add8e6;
-  background-color: transparent;
-  }
+  	color: white;
+  	background-color: transparent;
+  	}
   a:visited {
-  color: #add8e6;
-  background-color: transparent;
-  text-decoration: none;
-    }   
+  	color: white;
+  	background-color: transparent;
+    }
   .container {
     position: relative;
     text-align: center;
@@ -131,12 +150,12 @@
     background-color: inherit;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-    margin:10;
+		margin-bottom : 5px;
   }
   .roadmaptext{
     font-size: 26px;
     font-family: Arial, Helvetica, sans-serif;
-
+		margin-bottom : 5px;
   }
 
   .smalltext{
@@ -155,18 +174,6 @@
     margin:10;
   }
 
-  ul {
-    list-style-type: none
-  }
-
-  li {
-    display: table;
-    justify-content: start;
-    list-style: outside;
-    margin:10;
-
-  }
-
   .bigbox1 {
     width:50%;
     vertical-align: middle;
@@ -176,11 +183,8 @@
     width:50%;
     vertical-align: middle;
   }
-  li::before {
-    content: "*";
-    font-size: 18px;
-    color: yellow;
-  }
+
+
 
   @media only screen and (max-width:800px) {
   /* For tablets: */
@@ -198,8 +202,6 @@
     text-align: center;
 
     }
-
-  .
   .banner{
     font-size: 18px;
   }
@@ -227,7 +229,6 @@
     padding: 8px 0px;
     text-decoration: none;
   }
-
   .button {
     color: white;
     text-align: center;
@@ -247,7 +248,6 @@
     width:auto;
     vertical-align: end;
   }
-
   .bigbox2{
     display: none;
     vertical-align: middle;
@@ -273,15 +273,12 @@
     text-align: center;
 
     }
-
-  .
   .banner{
     font-size: 18px;
   }
   .header {
     font-size: 20px;
-
-  }
+  	}
   .subnav {
     padding: 0px 0px;
     display: flex;
@@ -302,7 +299,6 @@
     padding: 8px 0px;
     text-decoration: none;
   }
-
   .button {
     color: white;
     text-align: center;
@@ -322,7 +318,6 @@
     width:auto;
     vertical-align: end;
   }
-
   .bigbox2{
     display: none;
     vertical-align: middle;
@@ -335,7 +330,7 @@
 	</style>
 </head>
 <body>
-<div class="navbar"><a class="active" href="#home"><img align="center" height="100" src="3dao.png" width="100" /></a>
+<div class="navbar"><a class="active" href="#home"><img align="center" height="100" src="./images/3dao.png" width="100" /></a>
 <div class="subnav">
 <div class="button"><a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0x657F5b47C97b7475fe5EF683958942Ab0Fd79a1A">Exchanges</a></div>
 </div>
@@ -374,9 +369,9 @@
 			<div class="text">A digital experiment in Representative democracy and capitalism.</div>
 			</td>
 			<td class="bigbox2">
-			<div class="container"><img height="460" src="cool.gif" width="460" />
+			<div class="container"><img height="460" src="./images/cool.gif" width="460" />
 			<div class="centered">
-			<div class="container"><img src="backImage.png" /></div>
+			<div class="container"><img src="./images/backImage.png" /></div>
 			&nbsp;
 
 			<div class="smalltext"><u>Decentralized Democratic Autonomous Organization</u></div>
@@ -402,11 +397,14 @@
 
 			<ul>
 				<li>Restaurant / Grocer delivery.</li>
-				<li>Retail / Food &amp; Beverage impulse sales in the entertainment industry.</li>
 				<li>Investing in other cryptocurrencies.</li>
+				<li>Funding improvements to the DAO.
 				<li>Investing in real estate.</li>
+				<li>Funding LEGAL profitable digital enterprises.
 				<li>Funding human travel to Alpha Centauri and beyond.</li>
-				<li>All of the above and anything else the DAO votes to pursue.</li>
+				<li>Retail / Food &amp; Beverage impulse sales in the entertainment industry.</li>
+				<li>All of the above and much, much more.</li>
+				<li>Anything else the DAO votes to pursue.</li>
 			</ul>
 			</div>
 			&nbsp;
@@ -455,27 +453,29 @@
 
 			<div class="text">DAOIC Co-Sponsor Bonus:<span style="color: yellow">up to 3% Proposal Cost</span></div>
 
-			<div class="text">Governance: <span style="color: yellow"> Represenative(1 address = 1 vote)</span></div>
-
 			<div class="text">Exchanges: <a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0x657F5b47C97b7475fe5EF683958942Ab0Fd79a1A">Uniswap (Polygon)</a></div>
 			</td>
 			<td>
 			<div class="header">Networks</div>
-			<div class="text"><b>Polygon</b></div>
+			<div class="text" ><b>Polygon</b></div>
 
-			<div class="text"><a href="https://polygonscan.com/address/0x2BFd1C13323BE9274dd31596bDEFda573f4A32aB">DGT Token</a></div>
-			&nbsp;
-			<div class="text"><a href="https://polygonscan.com/address/0xc4d35A57906A8eCca8D31b090dD8523551909f7A">Representatives</a></div>
-			&nbsp;
-            <div class="text"><b>Ropsten</b></div>
-            <li><a href="https://polygonscan.com/address/0xCd32E15E0259d6875624E0172D7580B4B7F35538">DGT Token</a></li></div>
-			&nbsp;
-			<div class="text"><a href="https://polygonscan.com/address/0xf2d313c228367f24CE2e8a414cA396E53dbE72dA">Representatives</a></div>
-			&nbsp;
-			<div class="text"><a href="https://polygonscan.com/address/0x7F2800Ff1056Cb957BF589E23aC456ca6123Fa24">DaoGov</a></div>
-            &nbsp;
-			<div class="text"><a href="https://polygonscan.com/address/0x59941493b0Ce064196EE006FA8472442d652360D">ProposalPool</a></div>
-	
+			<div class="text">
+				<ul>
+					<li><a href="https://polygonscan.com/address/0x2BFd1C13323BE9274dd31596bDEFda573f4A32aB">Token Contract</a></li>
+					<li><a href="https://polygonscan.com/address/0xc4d35A57906A8eCca8D31b090dD8523551909f7A">Representatives</a></ul>
+					</div>
+
+      <div class="text"><b>Ropsten</b></div>
+
+      <div class="text">
+				<ul>
+					<li><a href="https://polygonscan.com/address/0xCd32E15E0259d6875624E0172D7580B4B7F35538">DGT Token</a></li>
+					<li><a href="https://polygonscan.com/address/0xf2d313c228367f24CE2e8a414cA396E53dbE72dA">Representatives</a></li>
+					<li><a href="https://polygonscan.com/address/0x7F2800Ff1056Cb957BF589E23aC456ca6123Fa24">DaoGov</a></li>
+          <li><a href="https://polygonscan.com/address/0x59941493b0Ce064196EE006FA8472442d652360D">ProposalPool</a></li>
+				</ul>
+			</div>
+
 			</td>
 		</tr>
 	</tbody>
@@ -495,18 +495,20 @@
 			<td class="bigbox1">
 			<div class="text">
 			<ul>
-				<li>One address equals one vote.</li>
-				<li>Represenative(Rep) eligibility requires holding 10K+ tokens for 30 days.</li>
-				<li>Reps with 100K or more tokens can sponsor proposals.</li>
-				<li>Reps with less then 100k DGT can partially sponsor proposals.</li>
-				<li>Fully funded(85%) proposals gain a % bonus if proposal passes, is enacted and completed.</li>
-				<li>Partially funded proposals gain 2500 DGT if the proposal passes, is enacted and completed.</li>
-				<li>Max proposal amount = (2% current treasury) * current treasury/original treasury amount .</li>
-				<li>Cancelled enacted proposals are penalized 10% which go into the treasury.</li>
-				<li>Stakers receive 100% of the stake back if a sponsor cancels a proposal.</li>
-				<li>Any proposals that could be considered illegal will be vetoed.</li>
-				<li>Digi powers expire 180 days after launch.</li>
-				<li>180 days after launch, 10 elected Digi-Senators will replace the Digi.</li>
+				<li>Representative(Rep) status requires registering and holding 10K+ DGT for 14 days.</li>
+				<li>Every Rep can vote and one address equals one vote.</li>
+				<li>Proposal initialization requires 1M DGT (sum of all initializers DGT balance).</li>
+				<li>Initialization points equal the DGT balance of the holder.
+				<li>Any Rep can add initilization points.</li>
+				<li>Fully funded(85%) completed proposals gain a % bonus.</li>
+				<li>Partially funded proposals gain 2500 DGT if the proposal is completed.</li>
+				<li>Max proposal amount = 2% current treasury strength .</li>
+				<li>If proposer cancels proposal, 10% of their stake goes to the co-sponsors.</li>
+				<li>Only proposer, Digi or facilitator may cancel a proposal.
+				<li>If proposal is cancelled, co-sponsors receive 100% of their stake.</li>
+				<li>Any proposals that could be considered illegal will be vetoed asap.</li>
+				<li>Digi(creator) powers expire 180 days after launch.</li>
+				<li>180 days after launch, 10 or more elected Digi-Senators will replace the Digi.</li>
 				<li>All by-laws may be changed by a vote if representives vote to do so.</li>
 			</ul>
 			</div>
@@ -537,20 +539,32 @@
 			</div>
 			</td>
 			<td class="bigbox1" style="margin-top:60;">
-			<div class="roadmaptext" style="margin-top:30;"><img height="25px" src="check.png" width="25px" /><span style="color: yellow"> Launch<img height="25px" src="rocket.png" width="25px" /><img height="25px" src="rocket.png" width="25px" /><img height="25px" src="rocket.png" width="25px" /> 01-12-2022</span></div>
 
-			<div class="roadmaptext" style="margin-top:30;"><br />
-			<span style="color: white">Governance contracts<img height="25px" src="governance.jpg" width="25px" />1-19-2021</span></div>
-			<li>Representative</li>      
+			<div class="roadmaptext" style="margin-top:30;">
+				<img height="25px" src="./images/check.png" width="25px" />
+				<span style="color: yellow"> Launch<img height="25px" src="./images/rocket.png" width="25px" />
+					<img height="25px" src="./images/rocket.png" width="25px" />
+					<img height="25px" src="./images/rocket.png" width="25px" /> 01-13-2022</span></div>
+
+			<div class="roadmaptext" style="margin-top:30;">
+			<span style="color: white">
+				<img height="25px" src="./images/governance.jpg" width="25px"/> Governance contracts 1-19-2021</span></div>
+			<div class="text" ><ul>
+						<li>Representative</li>
             <li>Dao Governance</li>
-			<div class="roadmaptext" style="margin-top:30;"><br />
-			<span style="color: white">Operator contract<img height="25px" src="operator.png" width="25px" />1-13-2022</span></div>
+						<li>Proposal Pool</li></ul></div><br />
+			<div class="roadmaptext" style="margin-top:30;">
+			<span style="color: white"><img height="25px" src="./images/operator.png" width="25px" /> Operator contracts 1-26-2022</span></div>
+			<div class="text">
+				<ul>
+							<li>Operator</li>
+							<li>OperatorLock</li></ul></div>
 
 			<div class="roadmaptext" style="margin-top:30;"><br />
-			<span style="color: white">Digitrade Android App<img height="25px" src="android.png" width="25px" />1-20-2022</span></div>
+			<span style="color: white"><img height="25px" src="./images/android.png" width="25px"/> Digitrade Android App 2-15-2022</span></div>
 
 			<div class="roadmaptext" style="margin-top:30;"><br />
-			<span style="color: white">Voting begins<img height="25px" src="liberty.png" width="25px" />2-03-2022</span></div>
+			<span style="color: white"><img height="25px" src="./images/liberty.png" width="25px" /> Voting begins 1-26-2022</span></div>
 			</td>
 		</tr>
 	</tbody>
