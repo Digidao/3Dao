@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
-//1/11/2022
+//1/12/2022
 contract SafeMath {
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -31,7 +31,7 @@ contract SafeMath {
 }
 
 contract Digitrade is SafeMath {
-    address pool;
+    address public pool;
     address digi;
 
     string public symbol;
@@ -39,7 +39,8 @@ contract Digitrade is SafeMath {
 
     uint8 public decimals;
     uint _totalSupply;
-    uint _poolSupply;
+    uint public _poolSupply;
+    bool public _poolSupplySent;
 
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
@@ -54,20 +55,23 @@ contract Digitrade is SafeMath {
         _poolSupply = 20_000_000e18;  //20 million
         balances[msg.sender] = _totalSupply;
         digi = msg.sender;
+        _poolSupplySent = false;
 
     }
     modifier onlyDigi(){
         require(msg.sender == digi, "You are not the Digi");
         _;
     }
-
-    function activatePool(address _pool) public onlyDigi{
+    modifier onlyNoPool(){
+        require(_poolSupplySent == false);
+        _;
+    }
+    function activatePool(address _pool) public onlyDigi onlyNoPool{
       transfer(_pool, _poolSupply);
+      pool = _pool;
+      _poolSupplySent = true;
     }
 
-    function getPoolAddress()public view returns(uint){
-        return balances[pool];
-    }
     function totalSupply() public view returns (uint) {
         return _totalSupply - balances[address(0)];
     }

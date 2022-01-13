@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
-//1/11/2022
+
 
 interface Digi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
@@ -9,8 +9,8 @@ interface Digi {
 
 contract Representatives {
     address public tokenAddress;
-    uint representativeMin;
-    uint repMaturation;
+    uint public representativeMin;
+    uint public repMaturation;
     mapping(address => Representative )  public registeredReps;
 
     struct Representative{
@@ -23,7 +23,7 @@ contract Representatives {
     constructor() {
         repMaturation = 10;  //for testing = 10..about 90 seconds
         representativeMin = 10_000e18; // 10000 Digitrade
-        tokenAddress = 0xd9145CCE52D386f254917e481eB44e9943F39138;
+        tokenAddress = 0x0e8637266D6571a078384A6E3670A1aAA966166F;
     }
 
 
@@ -40,14 +40,6 @@ contract Representatives {
            _repAddress = msg.sender;
         }
         return _repAddress;
-    }
-
-    function getRepMin() public view returns (uint){
-        return representativeMin;
-    }
-
-    function getMaturationTime() public view returns (uint) {
-        return repMaturation;
     }
 
     function registerRep(address _rep) public {

@@ -52,11 +52,11 @@ interface Pool{
 }
 
 contract DaoGov is SafeMath{
-    address tokenAddress; // Address of digitoken
+    address public tokenAddress; // Address of digitoken
     address digi; //Address of digitoken creator
     address governance; //This address
     address pool; //Address of pool
-    address representative;  //Address where represenative information is stored
+    address public representative;  //Address where represenative information is stored
     uint public minimumVotingPeriod; //Minimum time allotted for voting on a proposal
     address [] public proposalContracts; //An Array of enacted proposal contracts
     event proposalResult(uint _proposal, bool passed);
@@ -88,10 +88,10 @@ contract DaoGov is SafeMath{
     constructor(){
         minimumVotingPeriod = 10; //(Change to 70000)minimum blocks(Around 7 days) voting is allowed on proposal
         proposalIntializationThreshold = 1_000_000e18; //1000000 DGT 1% of total supply
-        digi = 0x62303c2b0515Bc0c82D3f83Dd002E35909E4a694;
-        pool = 0x4B564DE5959a47a048f23db787Fad8aB261cC234;
-        tokenAddress = 0xa85Dcda5e3841B82eEF7523C1A97FE8C22550199; //Address of DGT token
-        representative = 0x3191F953988B0C70A70b1BDE34478b61A624d1F2; //Address of Reprensatives
+        digi = 0x454486384935312cab9a53870083e1C898Ed4Fb3;
+        pool = 0x707560515D37a0e8d7eC8a0014AE46DeF3D9B8af;
+        tokenAddress = 0x0e8637266D6571a078384A6E3670A1aAA966166F; //Address of DGT token
+        representative = 0x6Bea0FBdD23a094d92949a7226164E6aBAaAC038; //Address of Reprensatives
         governance = address(this); //Governance Contract
         resignBlock = add(block.number,1726272); //(6 months from launch)block digi loses all special rights and system becomes truly decentralized.
     }
@@ -247,7 +247,9 @@ contract DaoGov is SafeMath{
         require(proposerBalance >= proposals[_proposal].proposalCost,"Your DGT balance is < than the amount needed to enact proposal");
         uint _releaseBlock = calculateReleaseBlock(_weeks);
         address newContractAddress;
+
         if(proposals[_proposal].proposalType ==0){
+
         DaoImprovementContract newContract = new DaoImprovementContract(
             msg.sender,
             proposals[_proposal].proposalCost,
@@ -255,15 +257,20 @@ contract DaoGov is SafeMath{
             _releaseBlock,
             digi,
             representative,
-            tokenAddress);
+            tokenAddress,
+            pool);
         newContractAddress = address(newContract);
         proposalContracts.push(address(newContract));
         }
+
         if(proposals[_proposal].proposalType ==1){
+
         ProfitOrientedContract newContract = new ProfitOrientedContract();
         newContractAddress = address(newContract);
         proposalContracts.push(address(newContract));
         }
+
+
         return newContractAddress;
     }
 */

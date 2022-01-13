@@ -29,7 +29,6 @@ contract SafeMath {
         uint256 c = a / b;
         return c;    }
 }
-
 interface InterfaceDigi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function totalSupply() external view returns (uint);
@@ -39,6 +38,7 @@ interface InterfaceDigi {
 
 interface InterfaceDaoGov {
   function getDaoGovAddress() external view returns (address);
+  function getDigitradeAddress() external view returns (address);
 }
 
  contract ProposalPool is SafeMath{
@@ -68,10 +68,8 @@ interface InterfaceDaoGov {
         uint availiableTokens = fundStrength() * 200;
         return availiableTokens;
     }
-    
-    //Interface to DaoGov etc....
 
-    
+
 
 
 
