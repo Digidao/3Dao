@@ -29,44 +29,89 @@ contract SafeMath {
         uint256 c = a / b;
         return c;    }
 }
-interface InterfaceDigi {
+interface IDigi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
-    function totalSupply() external view returns (uint);
+    function totalSupply() external view returns (uint supply);
     function transfer(address receiver, uint tokens) external returns (bool success);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
+    function approve(address spender, uint tokens) external returns (bool success);
 }
 
-interface InterfaceDaoGov {
-  function getDaoGovAddress() external view returns (address);
-  function getDigitradeAddress() external view returns (address);
+interface IProContract{
+    function getSponsorBalance(address _sponsor) external view returns (uint);
+    function getReleaseBlock() external view returns(uint);
+    function getProposalStatus() external view returns(bool);
+    function getSponsorPaymentStatus(address _sponsor) external view returns(bool);
+    function setSponsorBalance(address _sponsor) external;
 }
 
  contract ProposalPool is SafeMath{
 
-    address public digitrade;
-    address pool;
+    address public tokenContract;
+    address poolContract;
+    address governanceContract;
+    address contractCreator;
 
-    uint _poolSupply;
-    uint startingSupply;
+    uint _poolContractSupply;
+    uint initialpoolSupply;
+    uint daoicStakingBonus;
 
-    constructor(address _digitrade){
-     digitrade = _digitrade;
-     pool = address(this);
-     startingSupply = 20_000_000e18;
+    event completionNotification(
+    address proposal,
+    address facilitator,
+    uint compeletionBlock);
+
+    constructor(address _tokenContract){
+     tokenContract = _tokenContract;
+     poolContract = address(this);
+     contractCreator = msg.sender;
+     initialpoolSupply = 20_000_000e18;
+     daoicStakingBonus = 10; // 10% of sponsored amount
+    }
+
+    modifier onlyNotPaid(address _proposalContract, address _sponsor){
+        require(IProContract(_proposalContract).getSponsorBalance(_sponsor) > 0);
+        require(IProContract(_proposalContract).getSponsorPaymentStatus(_sponsor) == false);
+        _;
+    }
+    modifier onlyContractCreator(){
+        require(msg.sender == contractCreator, "You are not the contract creator");
+        _;
+    }
+    modifier onlyReleaseBlock(address _proposalContract){
+        require(block.number  > IProContract(_proposalContract).getReleaseBlock());
+        _;
+    }
+    modifier onlyCompletedProposals(address _proposalContract){
+        require(IProContract(_proposalContract).getProposalStatus() == true);
+        _;
     }
 
     function fundStrength() public view returns (uint){
-        return (InterfaceDigi(digitrade).balanceOf(pool) / startingSupply) * 100;
+        return IDigi(tokenContract).balanceOf(poolContract) * 100 /initialpoolSupply;
     }
 
-    function getPoolSupply() public view returns (uint){
-        return InterfaceDigi(digitrade).balanceOf(pool) ;
+    function getpoolContractSupply() public view returns (uint){
+        return IDigi(tokenContract).balanceOf(poolContract) ;
     }
 
-    function getMaxAvailiableTokens() external view returns(uint){
-        //.02 * (InterfaceDigi(digitrade).balanceOf(pool)**2) /startingSupply -> .02 * fundStrength() *10000 -> fundStrength() * 200;
+    function getProposalTokenLimit() external view returns(uint){
+        //.02 * (InterfaceDigi(tokenContract).balanceOf(poolContract)**2) /initialpoolSupply
+        //.02 * fundStrength() * 10000
         uint availiableTokens = fundStrength() * 200;
         return availiableTokens;
+    }
+
+    function repaySponsor(address sponsor, address proposalContract) public
+        onlyNotPaid(proposalContract,sponsor)
+        onlyReleaseBlock(proposalContract)
+        onlyCompletedProposals(proposalContract) {
+        uint sponsorContractBalance = IProContract(proposalContract).getSponsorBalance(sponsor); //get local instance of balance
+        uint totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //combine balance with bonus
+        IProContract(proposalContract).setSponsorBalance(sponsor);// Set balance to 0
+        IDigi(tokenContract).approve(sponsor,totalContractBalance);
+        bool success = IDigi(tokenContract).transferFrom(poolContract,sponsor,totalContractBalance);
+        require(success);
     }
 
 
