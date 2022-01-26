@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
-//1/12/2022
+pragma solidity 0.8.11;
 contract SafeMath {
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -63,7 +62,7 @@ contract Digitrade is SafeMath {
         _;
     }
     modifier onlyNoPool(){
-        require(_poolSupplySent == false);
+        require(_poolSupplySent == false, "Pool supply already sent");
         _;
     }
     function activatePool(address _pool) public onlyDigi onlyNoPool{

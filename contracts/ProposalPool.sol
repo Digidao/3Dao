@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity 0.8.11;
 
 contract SafeMath {
 
@@ -29,10 +29,9 @@ contract SafeMath {
         uint256 c = a / b;
         return c;    }
 }
+
 interface IDigi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
-    function totalSupply() external view returns (uint supply);
-    function transfer(address receiver, uint tokens) external returns (bool success);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
     function approve(address spender, uint tokens) external returns (bool success);
 }
@@ -43,13 +42,13 @@ interface IProContract{
     function getProposalStatus() external view returns(bool);
     function getSponsorPaymentStatus(address _sponsor) external view returns(bool);
     function setSponsorBalance(address _sponsor) external;
+    function getProposer() external view returns (address);
+    function getProposerBonus(address _sponsor) external view returns (bool);
 }
 
- contract ProposalPool is SafeMath{
-
+contract ProposalPool is SafeMath{
     address public tokenContract;
     address poolContract;
-    address governanceContract;
     address contractCreator;
 
     uint _poolContractSupply;
@@ -70,8 +69,8 @@ interface IProContract{
     }
 
     modifier onlyNotPaid(address _proposalContract, address _sponsor){
-        require(IProContract(_proposalContract).getSponsorBalance(_sponsor) > 0);
-        require(IProContract(_proposalContract).getSponsorPaymentStatus(_sponsor) == false);
+        require(IProContract(_proposalContract).getSponsorBalance(_sponsor) > 0, "Sponsor balance is too low ");
+        require(IProContract(_proposalContract).getSponsorPaymentStatus(_sponsor) == false,"Already paid");
         _;
     }
     modifier onlyContractCreator(){
@@ -79,11 +78,11 @@ interface IProContract{
         _;
     }
     modifier onlyReleaseBlock(address _proposalContract){
-        require(block.number  > IProContract(_proposalContract).getReleaseBlock());
+        require(block.number  > IProContract(_proposalContract).getReleaseBlock(),"Release block is in the future");
         _;
     }
     modifier onlyCompletedProposals(address _proposalContract){
-        require(IProContract(_proposalContract).getProposalStatus() == true);
+        require(IProContract(_proposalContract).getProposalStatus() == true,"Proposal is not complete");
         _;
     }
 
@@ -91,7 +90,7 @@ interface IProContract{
         return IDigi(tokenContract).balanceOf(poolContract) * 100 /initialpoolSupply;
     }
 
-    function getpoolContractSupply() public view returns (uint){
+    function getpoolSupply() public view returns (uint){
         return IDigi(tokenContract).balanceOf(poolContract) ;
     }
 
@@ -99,7 +98,7 @@ interface IProContract{
         //.02 * (InterfaceDigi(tokenContract).balanceOf(poolContract)**2) /initialpoolSupply
         //.02 * fundStrength() * 10000
         uint availiableTokens = fundStrength() * 200;
-        return availiableTokens;
+        return availiableTokens*10**18;
     }
 
     function repaySponsor(address sponsor, address proposalContract) public
@@ -107,12 +106,24 @@ interface IProContract{
         onlyReleaseBlock(proposalContract)
         onlyCompletedProposals(proposalContract) {
         uint sponsorContractBalance = IProContract(proposalContract).getSponsorBalance(sponsor); //get local instance of balance
-        uint totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //combine balance with bonus
-        IProContract(proposalContract).setSponsorBalance(sponsor);// Set balance to 0
+        uint totalContractBalance;
+        if(msg.sender == IProContract(proposalContract).getProposer()){ //Is proposer
+            if(IProContract(proposalContract).getProposerBonus(sponsor) == true){ //proposal fully funded?
+            totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //Yes
+            }else{
+            totalContractBalance = sponsorContractBalance + 2500;  //No
+            }
+        }else{
+            totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //regular 10% cosponsor bonus
+        }
+        IProContract(proposalContract).setSponsorBalance(sponsor);
         IDigi(tokenContract).approve(sponsor,totalContractBalance);
         bool success = IDigi(tokenContract).transferFrom(poolContract,sponsor,totalContractBalance);
-        require(success);
+        require(success, "This transaction did not succeed");
     }
+
+
+
 
 
 

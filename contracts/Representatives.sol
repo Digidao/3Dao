@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity 0.8.11;
 
 
 interface IDigi {
@@ -12,6 +12,7 @@ contract Representatives {
     uint public representativeMin;
     uint public repMaturation;
     mapping(address => Representative )  public registeredReps;
+    address digi;
 
     struct Representative{
         address _rep;
@@ -25,6 +26,12 @@ contract Representatives {
         representativeMin = 10_000e18; // 10000 Digitrade
         //REAL tokenAddress = 0x0e8637266D6571a078384A6E3670A1aAA966166F;
         tokenAddress = 0xd9145CCE52D386f254917e481eB44e9943F39138;
+        digi = msg.sender;
+    }
+
+    modifier onlyDigi(){
+        require(msg.sender == digi);
+        _;
     }
 
     function getBlock() public view returns (uint) {
@@ -44,13 +51,8 @@ contract Representatives {
         return true;
     }
 
-    function checkHodl(address _address) public view returns (bool isHodler){
-        require(IDigi(tokenAddress).balanceOf(_address) > representativeMin, "Has not hodled");
-        return true;
-    }
-
-    function removeNonHodlers(address _address) public{
-       if(checkHodl(_address) == false){
+    function removeNonHodlers(address _address) public onlyDigi{
+       if(IDigi(tokenAddress).balanceOf(_address) < representativeMin){
         delete registeredReps[_address];
        }
     }

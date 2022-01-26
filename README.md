@@ -21,7 +21,7 @@ http://www.3dao.io
 
 <h1>Ropsten Test Network</h1>
 <h3>Digitrade Token</h3>
-<a href ="https://ropsten.etherscan.io/address/0x0e8637266D6571a078384A6E3670A1aAA966166F">0x0e8637266D6571a078384A6E3670A1aAA966166F</a>
+<a href ="https://ropsten.etherscan.io/address/0x6017953778f88D8D146E3eaC063f6e511D5875c3">0x6017953778f88D8D146E3eaC063f6e511D5875c3</a>
 
 <h3>3DAO Governance</h3>
 <a href ="https://ropsten.etherscan.io/address/0x17e7934FeB93dfa424Eb48FEaCCe59Cd5fCc47E5">0x17e7934FeB93dfa424Eb48FEaCCe59Cd5fCc47E5</a>
