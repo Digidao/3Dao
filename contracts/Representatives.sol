@@ -25,7 +25,7 @@ contract Representatives {
         repMaturation = 10;  //for testing = 10..about 90 seconds
         representativeMin = 10_000e18; // 10000 Digitrade
         //REAL tokenAddress = 0x0e8637266D6571a078384A6E3670A1aAA966166F;
-        tokenAddress = 0xd9145CCE52D386f254917e481eB44e9943F39138;
+        tokenAddress = 0x7b96aF9Bd211cBf6BA5b0dd53aa61Dc5806b6AcE;
         digi = msg.sender;
     }
 
@@ -57,11 +57,10 @@ contract Representatives {
        }
     }
 
-    function registerRep(address _rep) public {
-      require(msg.sender == _rep);
+    function registerRep() public {
       require(IDigi(tokenAddress).balanceOf(msg.sender) > representativeMin, "Balance under 10K DGT");
       uint _unlockBlock = block.number + repMaturation;  //unlocks after 30 days or so
-      registeredReps[_rep] = Representative(_rep,block.number, _unlockBlock);
+      registeredReps[msg.sender] = Representative(msg.sender,block.number, _unlockBlock);
     }
 
 }

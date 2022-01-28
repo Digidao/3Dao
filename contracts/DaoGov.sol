@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity 0.8.11;
 
 
 contract SafeMath {
@@ -76,16 +76,17 @@ contract DaoGov is SafeMath{
         bool active;
     }
 
-    mapping (uint => Proposal) public proposals;
+    mapping(uint => Proposal) public proposals;
+
 
 
     constructor(){
         minimumVotingPeriod = 10; //(Change to 70000)minimum blocks(Around 7 days) voting is allowed on proposal
         proposalIntializationThreshold = 1000000000000000000000000; //1000000 DGT 1% of total supply
         digi = msg.sender;
-        tokenAddress = 0x56a2777e796eF23399e9E1d791E1A0410a75E31b; //Address of DGT token
-        pool = 0xb5465ED8EcD4F79dD4BE10A7C8e7a50664e5eeEB;
-        reps = 0xF27374C91BF602603AC5C9DaCC19BE431E3501cb; //Address of Represenatives
+        tokenAddress = 0x7b96aF9Bd211cBf6BA5b0dd53aa61Dc5806b6AcE; //Address of DGT token
+        pool = 0x3328358128832A260C76A4141e19E2A943CD4B6D;
+        reps = 0x4a9C121080f6D9250Fc0143f41B595fD172E31bf; //Address of Represenatives
         governance = address(this); //Governance Contract
         resignBlock = add(block.number,1726272); //(6 months from launch)block digi loses all special rights and system becomes truly decentralized.
     }
@@ -163,8 +164,6 @@ contract DaoGov is SafeMath{
             p.initialized = false;
             p.initializers = iVoted;
             p.active = false;
-
-
 
             return("Proposal ID",proposalContractID);
     }
@@ -276,6 +275,7 @@ interface IGov {
 
 contract Daoic is SafeMath{
     address public thisContract;
+    address public proposalOwner;
 
     uint public id;
     address public proposer;
@@ -301,7 +301,7 @@ contract Daoic is SafeMath{
     bool cancelled;
 
 
-    mapping(address => uint) stakebalance;
+    mapping(address => uint)  public stakebalance;
 
     event FundingNeeded(uint _amount, uint _timeRemaining);
     event TaskComplete(string completionMessage, bool _completionStatus);
@@ -315,6 +315,7 @@ contract Daoic is SafeMath{
     }
 
     mapping(address => Sponsor )  public sponsors;
+    Sponsor [] sponsorArray;
 
     constructor(
       uint _id,
@@ -336,6 +337,7 @@ contract Daoic is SafeMath{
         reps = _represensative;
         tokenContract = _tokenContract;
         governanceContract = _governanceContract;
+        proposalOwner = proposer;
 
         thisContract = address(this);
         notificationDeadline = safeSub(_releaseBlock , (div(_releaseBlock,10))); //Block where 'completionNotification' must be called.
@@ -378,8 +380,6 @@ contract Daoic is SafeMath{
         _;
     }
 
-
-
     function contractBalance() public view returns(uint){
         return IDigi(tokenContract).balanceOf(thisContract);
     }
@@ -414,6 +414,8 @@ contract Daoic is SafeMath{
             s.stakebonus = false;
             s.paid = false;
         }
+
+        sponsorArray.push(s);
 
         currentStake = contractBalance() + _amount;
         uint fundsNeeded = safeSub(proposalCost*10**18 , currentStake);
@@ -459,15 +461,8 @@ contract Daoic is SafeMath{
       }
     }
 
-    function giveFacilitatorCustody() public {
-        require(block.number > releaseBlock, "Wait until release blockblock");
-        stakebalance[facilitator] = stakebalance[address(0)];
-    }
-
     function payFacilitator() public {
-        IDigi(tokenContract).approve(facilitator,stakebalance[facilitator]);
-        bool success = IDigi(tokenContract).transferFrom(thisContract,facilitator,stakebalance[facilitator]);
-        require(success, "This transaction did not succeed");
+        IDigi(tokenContract).transfer(facilitator,IDigi(tokenContract).balanceOf(thisContract));
     }
 
     function getSponsorBalance(address _sponsor) public view returns(uint){
@@ -478,8 +473,9 @@ contract Daoic is SafeMath{
         return (sponsors[_sponsor].paid);
     }
 
+//Needs modifier to only allow pool to call function and make sure caller is sponsor
     function setSponsorBalance(address _sponsor) external{
-        require(msg.sender == _sponsor, "You are not a sponsor");
+        //require(msg.sender == _sponsor, "You are not a sponsor");
         sponsors[_sponsor].balance = 0;
         sponsors[_sponsor].paid = true;
     }
@@ -492,8 +488,12 @@ contract Daoic is SafeMath{
         return proposer;
     }
 
-    function getProposerBonus(address _sponsor) public view returns (bool){
-        return sponsors[_sponsor].stakebonus;
+    function getProposerBonus() public view returns (bool){
+        return sponsors[proposer].stakebonus;
+    }
+
+    function getReleaseBlock() public view returns(uint){
+    return releaseBlock;
     }
 
 

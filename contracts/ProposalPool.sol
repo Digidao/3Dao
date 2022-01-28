@@ -29,11 +29,12 @@ contract SafeMath {
         uint256 c = a / b;
         return c;    }
 }
-
 interface IDigi {
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
     function approve(address spender, uint tokens) external returns (bool success);
+    function transfer(address receiver, uint tokens) external returns (bool success);
+
 }
 
 interface IProContract{
@@ -43,7 +44,7 @@ interface IProContract{
     function getSponsorPaymentStatus(address _sponsor) external view returns(bool);
     function setSponsorBalance(address _sponsor) external;
     function getProposer() external view returns (address);
-    function getProposerBonus(address _sponsor) external view returns (bool);
+    function getProposerBonus() external view returns (bool);
 }
 
 contract ProposalPool is SafeMath{
@@ -69,7 +70,7 @@ contract ProposalPool is SafeMath{
     }
 
     modifier onlyNotPaid(address _proposalContract, address _sponsor){
-        require(IProContract(_proposalContract).getSponsorBalance(_sponsor) > 0, "Sponsor balance is too low ");
+        require(getSponsorBalance(_proposalContract,_sponsor) > 0, "Sponsor balance is too low ");
         require(IProContract(_proposalContract).getSponsorPaymentStatus(_sponsor) == false,"Already paid");
         _;
     }
@@ -101,26 +102,46 @@ contract ProposalPool is SafeMath{
         return availiableTokens*10**18;
     }
 
-    function repaySponsor(address sponsor, address proposalContract) public
+
+    function repaySponsor(address proposalContract, address sponsor) public
         onlyNotPaid(proposalContract,sponsor)
         onlyReleaseBlock(proposalContract)
         onlyCompletedProposals(proposalContract) {
-        uint sponsorContractBalance = IProContract(proposalContract).getSponsorBalance(sponsor); //get local instance of balance
-        uint totalContractBalance;
-        if(msg.sender == IProContract(proposalContract).getProposer()){ //Is proposer
-            if(IProContract(proposalContract).getProposerBonus(sponsor) == true){ //proposal fully funded?
-            totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //Yes
+        uint sponsorContractBalance = getSponsorBalance(proposalContract, sponsor); //get local instance of balance
+        uint totalSponsorBalance;
+        if(msg.sender == getProposalProposer(proposalContract)){ //Is proposer
+            if(getProposalBonusStatus(proposalContract) == true){ //proposal fully funded?
+            totalSponsorBalance = sponsorContractBalance + (sponsorContractBalance/10); //Yes
             }else{
-            totalContractBalance = sponsorContractBalance + 2500;  //No
+            totalSponsorBalance = sponsorContractBalance + 2500;  //No
             }
         }else{
-            totalContractBalance = sponsorContractBalance + (sponsorContractBalance/10); //regular 10% cosponsor bonus
+            totalSponsorBalance = sponsorContractBalance + (sponsorContractBalance/10); //regular 10% cosponsor bonus
         }
-        IProContract(proposalContract).setSponsorBalance(sponsor);
-        IDigi(tokenContract).approve(sponsor,totalContractBalance);
-        bool success = IDigi(tokenContract).transferFrom(poolContract,sponsor,totalContractBalance);
-        require(success, "This transaction did not succeed");
+        setSponsorBalance(proposalContract, sponsor);
+        IDigi(tokenContract).transfer(sponsor,totalSponsorBalance);
     }
+
+    function getRelease(address _proposalContract) public view returns(uint){
+        return IProContract(_proposalContract).getReleaseBlock();
+    }
+
+    function getSponsorBalance(address _proposalContract, address _sponsor) public view returns (uint){
+        return IProContract(_proposalContract).getSponsorBalance(_sponsor);
+    }
+
+    function getProposalProposer(address _proposalContract) public view returns (address){
+        return IProContract(_proposalContract).getProposer();
+    }
+    function getProposalBonusStatus(address _proposalContract) public view returns (bool){
+        return IProContract(_proposalContract).getProposerBonus();
+    }
+
+    function setSponsorBalance(address _proposalContract, address _sponsor) private {
+        IProContract(_proposalContract).setSponsorBalance(_sponsor);
+
+    }
+
 
 
 
