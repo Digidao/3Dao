@@ -10,26 +10,13 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "_block",
-				"type": "uint256"
-			}
-		],
-		"name": "Digichecked",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
 				"name": "_proposal",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "bool",
-				"name": "dtlcontract",
+				"name": "passed",
 				"type": "bool"
 			}
 		],
@@ -50,31 +37,6 @@
 				"internalType": "uint256",
 				"name": "_releaseBlock",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkDigi",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkRegistration",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_unlockBlock",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -111,7 +73,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "get3DAOAddress",
+		"name": "getDaoGovAddress",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -150,20 +112,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "getStakePool",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getStandardBurn",
+		"name": "getMaxAvailiableTokens",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -196,6 +145,25 @@
 			}
 		],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "isRep",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -262,11 +230,6 @@
 			},
 			{
 				"internalType": "uint256",
-				"name": "startVoteBlock",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
 				"name": "endVoteBlock",
 				"type": "uint256"
 			},
@@ -298,6 +261,11 @@
 			{
 				"internalType": "bool",
 				"name": "initialized",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
 				"type": "bool"
 			}
 		],
@@ -323,133 +291,24 @@
 			}
 		],
 		"name": "propose",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "proposers",
 		"outputs": [
 			{
-				"internalType": "address",
-				"name": "proposer",
-				"type": "address"
-			},
-			{
 				"internalType": "string",
-				"name": "basic_description",
+				"name": "",
 				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "yesVotes",
+				"name": "",
 				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "noVotes",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startVoteBlock",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "endVoteBlock",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "proposalCost",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "voteEnded",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "votePass",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "enacted",
-				"type": "bool"
-			},
-			{
-				"internalType": "uint256",
-				"name": "initializationPoints",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "initialized",
-				"type": "bool"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "set3DAOAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "digitoken",
-				"type": "address"
-			}
-		],
-		"name": "setDigitradeAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_rep",
-				"type": "address"
-			}
-		],
-		"name": "setRepAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "pool",
-				"type": "address"
-			}
-		],
-		"name": "setStakePool",
-		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "stakePoolAddress",
+		"name": "reps",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -477,6 +336,43 @@
 			}
 		],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "tokenAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			}
+		],
+		"name": "verfifyProposalContract",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

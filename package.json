@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "lite-server",
-    "digitrade": "node digitrade.js",
+    "digitrade": "node contracts.js",
     "dao": "node daogov.js",
     "proposalContract": "node proposalContract.js",
     "test": "echo \"Error: no test specified\" && sexit 1"

@@ -1,0 +1,366 @@
+<html lang="en"><head><meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<style type="text/css">@font-face {
+  font-family: "curvy";
+  src: url("strasua.ttf");
+  }
+  body {
+  margin:0;
+  background-image: url("/images/background.jpg") ;
+  font-family: "curvy", Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  }
+	li
+{
+    height : 25px;
+}
+
+.ul1>li
+{
+    margin-bottom : 0px;
+}
+
+.ul2>li
+{
+    margin-bottom : 5px;
+}
+
+.ul3>li
+{
+    margin-bottom : 5px;
+}
+
+  a:link {
+  	color: white;
+  	background-color: transparent;
+  	}
+  a:visited {
+  	color: white;
+  	background-color: transparent;
+    }
+  .container {
+    position: relative;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: inherit;
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+   p{
+    word-break: break-all;
+    }
+
+  .button {
+    color: white;
+    padding: 3px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    float:right;
+    vertical-align: middle;
+
+    }
+  .button:hover {
+      background-color: yellow;
+      color: #0000ff;
+      font-weight:bold;
+    }
+
+  .navbar {
+    color: white;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    background-color: transparent;
+
+  }
+
+  .navbar a {
+    float: left;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 9px;
+    text-decoration: none;
+  }
+
+  .section {
+    height: 100vh;
+    width: 100%;
+    }
+
+  .subnav {
+    float: right;
+    font-size: 20px;
+    overflow: hidden;
+  }
+
+  .navbar a:hover, .subnav:hover .subnavbtn {
+    color: #0000ff;
+  }
+
+  .big{
+    font-size: 60px;
+    background-color: inherit;
+    font-family: inherit;
+    color:white;
+    text-align: left;
+
+  }
+
+  .banner{
+    font-size: 50px;
+    margin:10;
+
+    background-color: inherit;
+    font-family: Arial, Helvetica, sans-serif;
+    color:white;
+    text-align: left;
+  }
+
+  .header {
+    font-size: 32px;
+    background-color: inherit;
+    font-family: inherit;
+    color:white;
+    margin:10;
+
+  }
+
+  .text {
+    font-size: 16px;
+    background-color: inherit;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+		margin-bottom : 5px;
+  }
+  .roadmaptext{
+    font-size: 26px;
+    font-family: Arial, Helvetica, sans-serif;
+		margin-bottom : 5px;
+  }
+
+  .smalltext{
+   font-size: 12px;
+   float: center;
+   font-family: Arial, Helvetica, sans-serif;
+   color:white;
+   text-align: center;
+   }
+
+  .span{
+    font-size: 16px;
+    background-color: inherit;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin:10;
+  }
+
+  .bigbox1 {
+    width:50%;
+    vertical-align: middle;
+  }
+
+  .bigbox2{
+    width:50%;
+    vertical-align: middle;
+  }
+
+
+
+  @media only screen and (max-width:800px) {
+  /* For tablets: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+  .text{
+    font-size: 16px;
+
+  }
+  .span{
+    background-color: inherit;
+    font-family: inherit;
+    color: white;
+    text-align: center;
+
+    }
+  .banner{
+    font-size: 18px;
+  }
+  .header {
+    font-size: 20px;
+
+  }
+  .subnav {
+    padding: 0px 0px;
+    display: flex;
+    overflow: hidden;
+  }
+  .navbar {
+    background-color: #0000ff;
+    color:white;
+    padding: 0px 0px;
+    display: flex;
+    width:100%;
+  }
+  .navbar a {
+    float: center;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 0px;
+    text-decoration: none;
+  }
+  .button {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    float:center;
+    vertical-align: middle;
+    }
+    img {
+     display: none;
+
+  }
+  .active {
+      display:none;
+  }
+  .bigbox1 {
+    width:auto;
+    vertical-align: end;
+  }
+  .bigbox2{
+    display: none;
+    vertical-align: middle;
+  }
+  .roadmaptext{
+    font-size: 20px;
+
+  }
+  }
+  @media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+  .text{
+    font-size: 12px;
+
+  }
+  .span{
+    background-color: inherit;
+    font-family: inherit;
+    color: white;
+    text-align: center;
+
+    }
+  .banner{
+    font-size: 18px;
+  }
+  .header {
+    font-size: 20px;
+  	}
+  .subnav {
+    padding: 0px 0px;
+    display: flex;
+    overflow: hidden;
+  }
+  .navbar {
+    background-color: #0000ff;
+    color:white;
+    padding: 0px 0px;
+    display: flex;
+    width:100%;
+  }
+  .navbar a {
+    float: center;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px 0px;
+    text-decoration: none;
+  }
+  .button {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    float:center;
+    vertical-align: middle;
+    }
+    img {
+     display: none;
+
+  }
+  .active {
+      display:none;
+  }
+  .bigbox1 {
+    width:auto;
+    vertical-align: end;
+  }
+  .bigbox2{
+    display: none;
+    vertical-align: middle;
+  }
+  .roadmaptext{
+    font-size: 20px;
+
+  }
+  }
+	</style>
+</head>
+<body>
+<div class="navbar"><a class="active" href="#home"><img align="center" height="100" src="/images/3dao.png" width="100"></a>
+<div class="subnav">
+<div class="button" id="ConnectMetaMask">Launch DAO</div>
+
+</div>
+
+<div class="subnav">
+<div class="button"><a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0xb6903294d754175389bcba4b0f5955a964e317aa">Exchanges</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="https://github.com/Digidao/Digitrade">Github</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#roadmap">Roadmap</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#digidao">3DAO</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#tokenomics">Tokenomics</a></div>
+</div>
+
+<div class="subnav">
+<div class="button"><a href="#usecase">Usecase</a></div>
+</div>
+</div>
+
+
+
+</body></html>
