@@ -2,11 +2,11 @@
 pragma solidity 0.8.11;
 
 
-contract SafeMath {
+contract GovernanceMath {
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
+        require(c >= a, "GovernanceMath: addition overflow");
         return c;    }
 
     function safeAdd(uint a, uint b) internal pure returns (uint c) {
@@ -22,42 +22,41 @@ contract SafeMath {
         if (a == 0) {
             return 0;}
             uint256 c = a * b;
-            require(c / a == b, "SafeMath: multiplication overflow");
+            require(c / a == b, "GovernanceMath: multiplication overflow");
             return c;}
 
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b > 0, "SafeMath: division by zero");
+        require(b > 0, "GovernanceMath: division by zero");
         uint256 c = a / b;
         return c;    }
 }
 
-interface IDigi{
+interface IToken{
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
-    function approve(address spender, uint tokens) external returns (bool success);
     function transfer(address receiver, uint tokens) external returns (bool success);
-    }
+}
 
-interface IRep{
-    function getRep(address _address) external view returns (bool);
-    }
+interface IRepresentatives{
+    function isRep(address _address) external view returns (bool);
+}
 
-interface IProposalPool{
+interface IPool{
     function getProposalTokenLimit() external view returns(uint);
 }
 
-contract DaoGov is SafeMath{
-    address public tokenAddress; // Address of digitoken
-    address digi; //Address of digitoken creator
-    address governance; //This address
-    address pool; //Address of pool
-    address public reps;  //Address where represenative information is stored
-    uint public minimumVotingPeriod; //Minimum time allotted for voting on a proposal
-    address [] public proposalContracts; //An Array of enacted proposal contracts
+contract Governance is GovernanceMath{
+    address public tokenAddress; 
+    address consul; 
+    address thisContract; 
+    address pool; 
+    address reps;  
+    uint public minimumVotingPeriod; 
+    address [] public proposalContracts;
     event proposalResult(uint _proposal, bool passed);
-    uint resignBlock; //block digi loses all special rights and system becomes truly decentralized.
+    uint resignBlock; //block consul loses all special rights and system becomes truly decentralized.
     uint proposalIntializationThreshold; //Required amount of voting power to allow full voting on a proposal
-    uint proposalContractID; //The ID of each proposal contract
+    uint proposalContractID;
 
     struct Proposal {
         address proposer;
@@ -71,7 +70,7 @@ contract DaoGov is SafeMath{
         bool enacted;
         uint initializationPoints;
         bool initialized;
-        mapping(address => bool) voters;
+        mapping(address => bool) voters; 
         address [] initializers;
         bool active;
     }
@@ -80,30 +79,30 @@ contract DaoGov is SafeMath{
 
 
 
-    constructor(){
-        minimumVotingPeriod = 10; //(Change to 70000)minimum blocks(Around 7 days) voting is allowed on proposal
-        proposalIntializationThreshold = 1000000000000000000000000; //1000000 DGT 1% of total supply
-        digi = msg.sender;
-        tokenAddress = 0x7b96aF9Bd211cBf6BA5b0dd53aa61Dc5806b6AcE; //Address of DGT token
-        pool = 0x3328358128832A260C76A4141e19E2A943CD4B6D;
-        reps = 0x4a9C121080f6D9250Fc0143f41B595fD172E31bf; //Address of Represenatives
-        governance = address(this); //Governance Contract
-        resignBlock = add(block.number,1726272); //(6 months from launch)block digi loses all special rights and system becomes truly decentralized.
+    constructor(address _tokenAddress, address _pool, address _reps){
+        minimumVotingPeriod = 60480; //(Around 7 days) voting is allowed on proposal
+        proposalIntializationThreshold = 1000000000000000000000000; //1000000 3DAO 1% of total supply
+        consul = msg.sender;
+        tokenAddress = _tokenAddress; //Address of 3DAO token
+        pool = _pool; //Address of proposal pool
+        reps = _reps; //Address of Represenatives
+        thisContract = address(this); //Governance Contract
+        resignBlock = add(block.number,1800000); //(6 months from launch)consul loses all special rights and system becomes truly decentralized.
     }
 
-
-    modifier onlyDIGI(){
-        require(msg.sender == digi);
+  
+    modifier onlyConsul(){
+        require(msg.sender == consul);
         _;
     }
-    modifier DIGIcheck{
-        require(block.number < resignBlock, "DIGI no longer has any priviledges");
+    modifier consulCheck{
+        require(block.number < resignBlock, "counsel no longer has any priviledges");
         _;
 
     }
     modifier onlyReps(address _address){
-       require(IDigi(tokenAddress).balanceOf(msg.sender) > 10000000000000000000000, "Not enough digitrade tokens");
-       require(IRep(reps).getRep(_address));
+       require(IToken(tokenAddress).balanceOf(msg.sender) > 10000000000000000000000, "Not enough 3dao tokens");
+       require(IRepresentatives(reps).isRep(_address));               
       _;
     }
     modifier onlyInitializedProposal(uint _proposal){
@@ -122,31 +121,24 @@ contract DaoGov is SafeMath{
       require(block.number > proposals[_proposal].endVoteBlock ,"Voting period has not ended");
       _;
     }
-
     function getMaxAvailiableTokens() public view returns (uint){
-        return IProposalPool(pool).getProposalTokenLimit();
+        return IPool(pool).getProposalTokenLimit();
     }
-
-    function getDigiCheckBlock() public view returns(uint){
+    function getCounselResignBlock() public view returns(uint){
         return resignBlock;
     }
-    function getDigitradeAddress() public view returns(address){
+    function getTokenAddress() public view returns(address){
         return tokenAddress;
     }
-    function getDaoGovAddress() public view returns(address) {
-        return governance;
+    function getGovernanceAddress() public view returns(address) {
+        return thisContract;
     }
-
     function isRep(address _address) public view returns(bool){
-        return IRep(reps).getRep(_address);
+        return IRepresentatives(reps).isRep(_address);
     }
 
-    function getBlock() public view returns (uint) {
-        return block.number;
-    }
-
-    function propose(string memory detailedDescription, uint256 _dgtCost, uint _votePeriod) public onlyReps(msg.sender) returns (string memory,uint) {
-        require((_dgtCost) < getMaxAvailiableTokens(), "Proposal cost exceeds 2% of avaliable tokens");
+    function propose(string memory detailedDescription, uint256 _cost, uint _votePeriod) public onlyReps(msg.sender) returns (string memory,uint) {
+        require((_cost) < getMaxAvailiableTokens(), "Proposal cost exceeds 2% of avaliable tokens");
         require(_votePeriod > minimumVotingPeriod, "Not enough time for potential voters to become aware of proposal");
         address[] memory iVoted;
         proposalContractID = proposalContractID + 1;
@@ -156,7 +148,7 @@ contract DaoGov is SafeMath{
             p.yesVotes = 0;
             p.noVotes = 0;
             p.endVoteBlock = add(_votePeriod,block.number);
-            p.proposalCost =  _dgtCost;
+            p.proposalCost =  _cost;
             p.voteEnded = false;
             p.votePass = false;
             p.enacted = false;
@@ -164,14 +156,14 @@ contract DaoGov is SafeMath{
             p.initialized = false;
             p.initializers = iVoted;
             p.active = false;
-
+        
             return("Proposal ID",proposalContractID);
     }
 
     function initializeProposal(uint _proposal) public onlyReps(msg.sender) returns (string memory message, uint points){
       require(proposals[_proposal].initializationPoints < proposalIntializationThreshold, "Proposal Already initialized");
       uint previousPoints = proposals[_proposal].initializationPoints;
-      uint addedPoints = IDigi(tokenAddress).balanceOf(msg.sender);
+      uint addedPoints = IToken(tokenAddress).balanceOf(msg.sender);
       uint currentPoints = add(previousPoints, addedPoints);
       proposals[_proposal].initializationPoints = currentPoints;
       if(currentPoints >= proposalIntializationThreshold){
@@ -187,7 +179,7 @@ contract DaoGov is SafeMath{
       return ("1000000000000000000000000 required to initialize, Current initialization points: ", proposals[_proposal].initializationPoints);
         }
     }
-
+   
     function vote(uint _proposal, bool yes, bool no) public onlyReps(msg.sender) onlyInitializedProposal(_proposal) returns (string memory message){
        Proposal storage p = proposals[_proposal];
        require(!p.voters[msg.sender], "Only one vote per address");
@@ -218,9 +210,8 @@ contract DaoGov is SafeMath{
         return false;
         }
     }
-
-
-    function veto(uint _proposal) public onlyDIGI DIGIcheck(){
+    
+    function veto(uint _proposal) public onlyConsul consulCheck(){
         uint yesVotes = proposals[_proposal].yesVotes;
         uint noVotes  = proposals[_proposal].noVotes;
         require((div(yesVotes,noVotes)) < mul((div(2,3)),(add(yesVotes,noVotes)))," 66% majority overides DIGI authority");
@@ -231,62 +222,63 @@ contract DaoGov is SafeMath{
     }
 
     function calculateReleaseBlock(uint _weeks) public view returns (uint _releaseBlock){
-        _releaseBlock = block.number + (_weeks * 70000);
+        _releaseBlock = block.number + (_weeks * 60480);
         return _releaseBlock;
     }
-    function enactProposal(uint _proposal,uint _weeks,address _facilitator)
-        public  onlyProposalSponsor(_proposal) returns (address) {
+
+    function enactProposal(uint _proposal,uint _weeks,address _facilitator) public  
+        onlyProposalSponsor(_proposal) 
+        onlyNonEnactedProposals(_proposal) returns (address) {
         require(_weeks > 0," Proprosal needs at least 1 week to be completed");
         require(proposals[_proposal].votePass = true, "The vote did not pass");
-        uint proposerBalance = IDigi(tokenAddress).balanceOf(msg.sender);
-        require(proposerBalance >= proposals[_proposal].proposalCost,"Your DGT balance is < than the amount needed to enact proposal");
+        uint proposerBalance = IToken(tokenAddress).balanceOf(msg.sender);
+        require(proposerBalance >= proposals[_proposal].proposalCost,"Your balance is < than the amount needed to enact proposal");
         uint _releaseBlock = calculateReleaseBlock(_weeks);
         address newContractAddress;
 
-        Daoic newContract = new Daoic(
+        ProposalContract newContract = new ProposalContract(
             _proposal,
             msg.sender,
             proposals[_proposal].proposalCost,
             _facilitator,
             _releaseBlock,
-            digi,
+            consul,
             reps,
             tokenAddress,
-            governance);
+            thisContract,
+            pool);
         newContractAddress = address(newContract);
         proposalContracts.push(address(newContract));
-
+        proposals[_proposal].enacted == true;
 
 
         return (newContractAddress);
     }
 
-
     function verfifyProposalContract(uint id, address contractAddress) public view returns (bool){
         require(proposalContracts[id-1] == contractAddress, "This contract can not be verified");
-        return true;
+        return true; 
     }
 }
 
 
-interface IGov {
+interface IGovernance {
   function verfifyProposalContract(uint id, address contractAddress) external view returns (bool);
 }
 
-contract Daoic is SafeMath{
+contract ProposalContract is GovernanceMath{
     address public thisContract;
-    address public proposalOwner;
 
     uint public id;
     address public proposer;
     uint public proposalCost;
     address public facilitator;
     uint public releaseBlock;
-    address digi;
+    address consul;
     address public reps;
     address public tokenContract;
     address public governanceContract;
-
+    address public poolContract;
 
     uint public maximumProposerAmount;
     uint public fundingDeadline;
@@ -301,7 +293,6 @@ contract Daoic is SafeMath{
     bool cancelled;
 
 
-    mapping(address => uint)  public stakebalance;
 
     event FundingNeeded(uint _amount, uint _timeRemaining);
     event TaskComplete(string completionMessage, bool _completionStatus);
@@ -318,26 +309,27 @@ contract Daoic is SafeMath{
     Sponsor [] sponsorArray;
 
     constructor(
-      uint _id,
+      uint _id,  
       address _proposer,
       uint _cost,
       address _facilitator,
       uint _releaseBlock,
-      address _digi,
+      address _consul,
       address _represensative,
       address _tokenContract,
-      address _governanceContract
+      address _governanceContract,
+      address _poolContract
       ){
         id = _id;
         proposer = _proposer;
         facilitator = _facilitator;
         proposalCost = _cost;
-        releaseBlock = 50;// _releaseBlock; //Facilitator is paid after this block
-        digi = _digi;
+        releaseBlock = _releaseBlock;//Facilitator is paid after this block
+        consul = _consul;
         reps = _represensative;
         tokenContract = _tokenContract;
         governanceContract = _governanceContract;
-        proposalOwner = proposer;
+        poolContract = _poolContract;
 
         thisContract = address(this);
         notificationDeadline = safeSub(_releaseBlock , (div(_releaseBlock,10))); //Block where 'completionNotification' must be called.
@@ -359,8 +351,8 @@ contract Daoic is SafeMath{
     modifier onlyFacilitator(){
         require(msg.sender == facilitator, "You are not the facilitator");
         _;}
-    modifier onlyDIGI(){
-        require(msg.sender == digi, "Not the Digi");
+    modifier onlyConsul(){
+        require(msg.sender == consul, "Not the Digi");
         _;}
     modifier onlyMaxContractValue(uint _amount){
         require(_amount <= maximumProposerAmount, "Sending more than 85% of proposal cost");
@@ -369,31 +361,35 @@ contract Daoic is SafeMath{
         require(block.number < fundingDeadline, "Funding deadline has passed");
         _;}
     modifier onlyReps(address _address){
-        require(IRep(reps).getRep(_address),"You are not a rep");
+        require(IRepresentatives(reps).isRep(_address),"You are not a rep");
         _;}
     modifier onlyAvailiableStake(uint _amount){
         require(_amount <= safeSub(proposalCost,currentStake), "Sending more than the availiableStake");
         _;
         }
     modifier onlyVerifiedProposals(uint _id, address _proposal){
-        require(IGov(governanceContract).verfifyProposalContract(_id, _proposal), "This contract can not be verified");
+        require(IGovernance(governanceContract).verfifyProposalContract(_id, _proposal), "This contract can not be verified");
+        _;
+    }
+    modifier onlyPoolContract {
+        require(msg.sender == poolContract);
         _;
     }
 
     function contractBalance() public view returns(uint){
-        return IDigi(tokenContract).balanceOf(thisContract);
+        return IToken(tokenContract).balanceOf(thisContract);
     }
 
-    function SponsorDAOIC(uint _amount) public payable
-        onlyVerifiedProposals(id, thisContract)
-        onlyReps(msg.sender)
-        onlyBeforeCutoff
-        onlyAvailiableStake(_amount)
-        onlyMaxContractValue(_amount)
+    function SponsorProposalContract(uint _amount) public 
+        onlyVerifiedProposals(id, thisContract) 
+        onlyReps(msg.sender) 
+        onlyBeforeCutoff 
+        onlyAvailiableStake(_amount) 
+        onlyMaxContractValue(_amount) 
 
         returns (string memory message)
         {
-
+        
         require(_amount > 0,"Can't sponsor proposal with a 0 value");
         require(sponsors[msg.sender].balance == 0, "You have already sponsored this proposal");
         bool proposerBonus = false;
@@ -406,7 +402,7 @@ contract Daoic is SafeMath{
             s.isSponsor = true;
             s.stakebonus = proposerBonus;
             s.paid = false;
-
+    
         }else{
             s.sponsorAddress = msg.sender;
             s.balance = _amount;
@@ -416,14 +412,14 @@ contract Daoic is SafeMath{
         }
 
         sponsorArray.push(s);
-
+        
         currentStake = contractBalance() + _amount;
         uint fundsNeeded = safeSub(proposalCost*10**18 , currentStake);
         emit FundingNeeded(fundsNeeded, notificationDeadline);
         enabled = true;
 
-        IDigi(tokenContract).transferFrom(msg.sender,thisContract, _amount);
-
+        IToken(tokenContract).transferFrom(msg.sender,thisContract, _amount);
+        
         message = "Completion notification due by";
 
         return (message);
@@ -431,7 +427,7 @@ contract Daoic is SafeMath{
     }
 
     function cancel( string memory reason) public onlyVerifiedProposals(id, thisContract) onlyEnabled returns (string memory _reason){
-        if(msg.sender == digi|| msg.sender == facilitator){
+        if(msg.sender == consul|| msg.sender == facilitator){
             require(block.number < releaseBlock, "block.number > release block");
             enabled = false;
             cancelled = true;
@@ -443,7 +439,7 @@ contract Daoic is SafeMath{
             penalized = true;
             if(fundingDeadline < block.number){}else{
             timeOut = 40;//000; //4 days
-            stakebalance[msg.sender] = (mul(90,(stakebalance[msg.sender]))/100);}
+            }
             timeOut = 30;//000; //3 days
             enabled = false;
             cancelled = true;
@@ -461,8 +457,9 @@ contract Daoic is SafeMath{
       }
     }
 
-    function payFacilitator() public {
-        IDigi(tokenContract).transfer(facilitator,IDigi(tokenContract).balanceOf(thisContract));
+    function payFacilitator() public onlyFacilitator {
+        require(block.number > releaseBlock, "Block number is less than release block");
+        IToken(tokenContract).transfer(facilitator,IToken(tokenContract).balanceOf(thisContract));
     }
 
     function getSponsorBalance(address _sponsor) public view returns(uint){
@@ -473,8 +470,7 @@ contract Daoic is SafeMath{
         return (sponsors[_sponsor].paid);
     }
 
-//Needs modifier to only allow pool to call function and make sure caller is sponsor
-    function setSponsorBalance(address _sponsor) external{
+    function setSponsorBalance(address _sponsor) external onlyPoolContract{
         //require(msg.sender == _sponsor, "You are not a sponsor");
         sponsors[_sponsor].balance = 0;
         sponsors[_sponsor].paid = true;
@@ -493,15 +489,7 @@ contract Daoic is SafeMath{
     }
 
     function getReleaseBlock() public view returns(uint){
-    return releaseBlock;
+        return releaseBlock;
     }
-
-
-
-
-
-
-
-
 
 }

@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
-contract SafeMath {
+
+
+contract TokenMath {
 
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
+        require(c >= a, "TokenMath: addition overflow");
         return c;    }
 
     function safeAdd(uint a, uint b) internal pure returns (uint c) {
@@ -20,18 +22,18 @@ contract SafeMath {
         if (a == 0) {
             return 0;}
             uint256 c = a * b;
-            require(c / a == b, "SafeMath: multiplication overflow");
+            require(c / a == b, "TokenMath: multiplication overflow");
             return c;}
 
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b > 0, "SafeMath: division by zero");
+        require(b > 0, "TokenMath: division by zero");
         uint256 c = a / b;
         return c;    }
 }
 
-contract Digitrade is SafeMath {
+contract Token is TokenMath {
     address public pool;
-    address digi;
+    address consul;
 
     string public symbol;
     string public name;
@@ -47,25 +49,25 @@ contract Digitrade is SafeMath {
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
     constructor() {
-        symbol = "DGT";
-        name = "Digitrade";
+        symbol = "3DAO";
+        name = "3DaoToken";
         decimals = 18;
         _totalSupply = 100_000_000e18; //100 million
         _poolSupply = 20_000_000e18;  //20 million
         balances[msg.sender] = _totalSupply;
-        digi = msg.sender;
+        consul = msg.sender;
         _poolSupplySent = false;
 
     }
-    modifier onlyDigi(){
-        require(msg.sender == digi, "You are not the Digi");
+    modifier onlyconsul(){
+        require(msg.sender == consul, "You are not the consul");
         _;
     }
     modifier onlyNoPool(){
         require(_poolSupplySent == false, "Pool supply already sent");
         _;
     }
-    function activatePool(address _pool) public onlyDigi onlyNoPool{
+    function activatePool(address _pool) public onlyconsul onlyNoPool{
       transfer(_pool, _poolSupply);
       pool = _pool;
       _poolSupplySent = true;
