@@ -27,10 +27,10 @@ http://www.3dao.io
 <a href ="https://ropsten.etherscan.io/address/0xAc11113245f594FdF83f056170387573a963C568">0xAc11113245f594FdF83f056170387573a963C568</a>
 
 <h3>Representatives</h3>
-<a href ="https://ropsten.etherscan.io/address/0xEf19B21Ed1CD6C301cb4011Ab65D1a26DfA589ad">0xEf19B21Ed1CD6C301cb4011Ab65D1a26DfA589ad</a>
+<a href ="https://ropsten.etherscan.io/address/0xEf19B21Ed1CD6C301cb4011Ab65D1a26DfA589ad">0x25de0241cfe694ece735398a8df7d4ba13b18b56</a>
 
 <h3>3DAO Governance</h3>
-<a href ="https://ropsten.etherscan.io/address/0x0C9C1C8a505b5dA111A056dDd1ffb46c817B16fB">0x0C9C1C8a505b5dA111A056dDd1ffb46c817B16fB</a>
+<a href ="https://ropsten.etherscan.io/address/0x0C9C1C8a505b5dA111A056dDd1ffb46c817B16fB">0xef5bb748005e35829da7512fc4d82c4babfe8ae9</a>
 
 
 
