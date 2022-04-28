@@ -1,4 +1,4 @@
-<h1>Digitrade Website</h1>
+<h1>3DAO Website</h1>
 http://www.3dao.io
 
 <h1>Polygon</h1>
