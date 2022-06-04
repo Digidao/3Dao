@@ -20,14 +20,22 @@ contract Representatives {
         uint _unlockBlock;
     }
 
+    //Testing constructor
+    constructor(address _tokenAddress) {
+        repMaturation = 6;  //About 1 minute
+        representativeMin = 10_000e18; // 10000 Digitrade
+        tokenAddress = _tokenAddress;
+        consul = msg.sender;
+    }
 
+    /*Real Constructor
     constructor(address _tokenAddress) {
         repMaturation = 60480;  //About 7 days
         representativeMin = 10_000e18; // 10000 Digitrade
         tokenAddress = _tokenAddress;
         consul = msg.sender;
     }
-
+    */
     modifier onlyConsul(){
         require(msg.sender == consul);
         _;
@@ -37,10 +45,10 @@ contract Representatives {
         return registeredReps[_address]._unlockBlock;
     }
 
-    function isRep(address _address) public view returns (bool _isRep){
+    function isRep(address _address) public view returns (bool){
         require(getUnlockBlock(_address) > 0, "Not registered");
         require(block.number > getUnlockBlock(_address), "Registered but not a rep yet");
-        return _isRep;
+        return true;
     }
 
     function removeNonHodlers(address _address) public onlyConsul{

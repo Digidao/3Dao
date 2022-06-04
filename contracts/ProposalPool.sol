@@ -1,34 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
 
-contract PoolMath {
-
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "PoolMath: addition overflow");
-        return c;    }
-
-    function safeAdd(uint a, uint b) internal pure returns (uint c) {
-        c = a + b;
-        require(c >= a);
-    }
-    function safeSub(uint a, uint b) internal pure returns (uint c) {
-        require(b <= a);
-        c = a - b;
-    }
-
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;}
-            uint256 c = a * b;
-            require(c / a == b, "PoolMath: multiplication overflow");
-            return c;}
-
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b > 0, "PoolMath: division by zero");
-        uint256 c = a / b;
-        return c;    }
-}
 interface IToken {
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function transferFrom(address sender, address receiver, uint tokens) external returns (bool success);
@@ -47,7 +19,7 @@ interface IProposalContract{
     function getProposerBonus() external view returns (bool);
 }
 
-contract ProposalPool is PoolMath{
+contract ProposalPool{
     address public tokenContract;
     address poolContract;
     address contractCreator;
@@ -95,13 +67,16 @@ contract ProposalPool is PoolMath{
         return IToken(tokenContract).balanceOf(poolContract) ;
     }
 
+    function getProposalBonus() public view returns(uint){
+        return (fundStrength() * proposalBonus);
+    }
+
     function getProposalTokenLimit() external view returns(uint){
         //.02 * (InterfaceDigi(tokenContract).balanceOf(poolContract)**2) /initialpoolSupply
         //.02 * fundStrength() * 10000
         uint availiableTokens = fundStrength() * 200;
         return availiableTokens*10**18;
     }
-
 
     function repaySponsor(address proposalContract) public
         onlyNotPaid(proposalContract, msg.sender)
@@ -138,10 +113,12 @@ contract ProposalPool is PoolMath{
         return IProposalContract(_proposalContract).getProposerBonus();
     }
 
-    //Only a proposer or co-sponsor of the proposal can call and only repaySponsor function and can only set to 0 
+    //Only a proposer or co-sponsor of the proposal can call and only repaySponsor function and can only set to 0
     function setSponsorBalance(address _proposalContract, address _sponsor) private {
         IProposalContract(_proposalContract).setSponsorBalance(_sponsor);
     }
+
+
 
 
 

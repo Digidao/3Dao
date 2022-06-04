@@ -59,83 +59,6 @@
     transform: translate(-50%, -50%);
   }
 
-   p{
-    word-break: break-all;
-    }
-
-  .button {
-    color: white;
-    padding: 3px 8px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 12px;
-    float:right;
-    vertical-align: middle;
-
-    }
-  .button:hover {
-      background-color: yellow;
-      color: #0000ff;
-      font-weight:bold;
-    }
-
-  .navbar {
-    color: white;
-    position: fixed; /* Set the navbar to fixed position */
-    top: 0; /* Position the navbar at the top of the page */
-    width: 100%; /* Full width */
-    z-index: 1;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
-    background-color: transparent;
-
-  }
-
-  .navbar a {
-    float: left;
-    color: white;
-    text-align: center;
-    vertical-align: middle;
-    padding: 8px 9px;
-    text-decoration: none;
-  }
-
-  .section {
-    height: 100vh;
-    width: 100%;
-    }
-
-  .subnav {
-    float: right;
-    font-size: 20px;
-    overflow: hidden;
-  }
-
-  .navbar a:hover, .subnav:hover .subnavbtn {
-    color: #0000ff;
-  }
-
-  .big{
-    font-size: 60px;
-    background-color: inherit;
-    font-family: inherit;
-    color:white;
-    text-align: left;
-
-  }
-
-  .banner{
-    font-size: 50px;
-    margin:10;
-
-    background-color: inherit;
-    font-family: Arial, Helvetica, sans-serif;
-    color:white;
-    text-align: left;
-  }
-
   .header {
     font-size: 32px;
     background-color: inherit;
@@ -152,27 +75,6 @@
     color: black;
 		margin-bottom : 5px;
   }
-  .roadmaptext{
-    font-size: 26px;
-    font-family: Arial, Helvetica, sans-serif;
-		margin-bottom : 5px;
-  }
-
-  .smalltext{
-   font-size: 12px;
-   float: center;
-   font-family: Arial, Helvetica, sans-serif;
-   color:white;
-   text-align: center;
-   }
-
-  .span{
-    font-size: 16px;
-    background-color: inherit;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    margin:10;
-  }
 
   .bigbox1 {
     width:50%;
@@ -186,191 +88,80 @@
 
 
 
-  @media only screen and (max-width:800px) {
+  @media only screen and (max-width:800px)
+	{
   /* For tablets: */
   .menu, .main, .right {
     width: 100%;
   }
-  .text{
-    font-size: 16px;
-
-  }
-  .span{
+	.bigbox1 {
+		width:auto;
+		vertical-align: end;
+	}
+	.header {
+    font-size: 25px;
     background-color: inherit;
     font-family: inherit;
-    color: white;
-    text-align: center;
-
-    }
-  .banner{
-    font-size: 18px;
-  }
-  .header {
-    font-size: 20px;
+    color:black;
+    margin:10;
 
   }
-  .subnav {
-    padding: 0px 0px;
-    display: flex;
-    overflow: hidden;
-  }
-  .navbar {
-    background-color: #0000ff;
-    color:white;
-    padding: 0px 0px;
-    display: flex;
-    width:100%;
-  }
-  .navbar a {
-    float: center;
-    color: white;
-    text-align: center;
-    vertical-align: middle;
-    padding: 8px 0px;
-    text-decoration: none;
-  }
-  .button {
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 11px;
-    float:center;
-    vertical-align: middle;
-    }
-    img {
-     display: none;
+	.text{
+		font-size: 20px;
 
-  }
-  .active {
-      display:none;
-  }
-  .bigbox1 {
-    width:auto;
-    vertical-align: end;
-  }
-  .bigbox2{
-    display: none;
-    vertical-align: middle;
-  }
-  .roadmaptext{
-    font-size: 20px;
+	}
+	.text2{
+		font-size: 14px;
 
-  }
+	}
   }
   @media only screen and (max-width:500px) {
   /* For mobile phones: */
   .menu, .main, .right {
     width: 100%;
   }
-  .text{
-    font-size: 12px;
-
-  }
-  .span{
-    background-color: inherit;
-    font-family: inherit;
-    color: white;
-    text-align: center;
-
-    }
-  .banner{
-    font-size: 18px;
-  }
-  .header {
-    font-size: 20px;
-  	}
-  .subnav {
-    padding: 0px 0px;
-    display: flex;
-    overflow: hidden;
-  }
-  .navbar {
-    background-color: #0000ff;
-    color:white;
-    padding: 0px 0px;
-    display: flex;
-    width:100%;
-  }
-  .navbar a {
-    float: center;
-    color: white;
-    text-align: center;
-    vertical-align: middle;
-    padding: 8px 0px;
-    text-decoration: none;
-  }
-  .button {
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 11px;
-    float:center;
-    vertical-align: middle;
-    }
-    img {
-     display: none;
-
-  }
-  .active {
-      display:none;
-  }
   .bigbox1 {
     width:auto;
     vertical-align: end;
   }
-  .bigbox2{
-    display: none;
-    vertical-align: middle;
+	.header {
+    font-size: 22px;
+    background-color: inherit;
+    font-family: inherit;
+    color:black;
+    margin:10;
+
   }
-  .roadmaptext{
-    font-size: 20px;
+	.text{
+    font-size: 18px;
+
+  }
+	.text2{
+    font-size: 14px;
 
   }
   }
 	</style>
 </head>
 <body>
-<div class="navbar"><a class="active" href="#home"><img align="center" height="100" src="/images/3dao.png" width="100"></a>
 
-<div class ="subnav">
-	<div class="button" ><a href="/gov.html">Governance</a></div>
-</div>
-<div class="subnav">
-<div class="button"><a href="https://app.uniswap.org/#/swap?inputCurrency=ETH&amp;outputCurrency=0xb6903294d754175389bcba4b0f5955a964e317aa">Exchanges</a></div>
-</div>
-
-<div class="subnav">
-<div class="button"><a href="https://github.com/Digidao/Digitrade">Github</a></div>
-</div>
-
-<div class="subnav">
-<div class="button"><a href="#roadmap">Roadmap</a></div>
-</div>
-
-<div class="subnav">
-<div class="button"><a href="#digidao">3DAO</a></div>
-</div>
-
-<div class="subnav">
-<div class="button"><a href="#tokenomics">Tokenomics</a></div>
-</div>
-
-<div class="subnav">
-<div class="button"><a href="#usecase">Usecase</a></div>
-</div>
-</div>
 
 <div class="section">
 <div id="home">
 <table style="height: 100vh; background-color: white; border: none; margin:50;  border-spacing:30px 10px;">
 <tbody>
 		<tr>
-			<div class="header">3DAO Governance</div>
+			<div class="header">How 3Dao Governance works</div>
 
 			<td class="bigbox1">
-			<div class="header"><b>Decentralized, democratic union of<br>
-			smart contracts.</b></div>
-
+			<div class="text">1) A registered rep proposes an idea by calling the propose() function</div>
+			<div class="text2">1a) If the rep holds more than 1 million 3dao tokens the proposal is initialized and others reps can vote on the proposal</div>
+			<div class="text2">1b) If not, other representatives can add the weight of their own tokens to the proposal and initialize it</div>
+			<div class="text">2) Once the proposal is initialized, representatives are allowed to vote on it</div>
+			<div class="text">3) After the voting period ends, any rep can call the tallyProposal function which will emit the proposal result.</div>
+			<div class="text">4) Once the proposal is tallied, the proposer may enact the proposal</div>
+			<div class="text">4a) Consul reserves right to overide vote if no supermajority</div>
+			<div class="text">5) Once the proposal is initialized, representatives are allowed to vote on it</div>
 			<div class="header">3DAO Governance</div>
 			</td>
 

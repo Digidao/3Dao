@@ -43,15 +43,16 @@ interface IRepresentatives{
 
 interface IPool{
     function getProposalTokenLimit() external view returns(uint);
+    function getpoolSupply() external view returns (uint);
 }
 
 contract Governance is GovernanceMath{
-    address public tokenAddress; 
-    address consul; 
-    address thisContract; 
-    address pool; 
-    address reps;  
-    uint public minimumVotingPeriod; 
+    address public tokenAddress;
+    address consul;
+    address thisContract;
+    address pool;
+    address reps;
+    uint public minimumVotingPeriod;
     address [] public proposalContracts;
     event proposalResult(uint _proposal, bool passed);
     uint resignBlock; //block consul loses all special rights and system becomes truly decentralized.
@@ -70,7 +71,7 @@ contract Governance is GovernanceMath{
         bool enacted;
         uint initializationPoints;
         bool initialized;
-        mapping(address => bool) voters; 
+        mapping(address => bool) voters;
         address [] initializers;
         bool active;
     }
@@ -78,7 +79,20 @@ contract Governance is GovernanceMath{
     mapping(uint => Proposal) public proposals;
 
 
+    //TESTING CONSTUCTOR
+     constructor(address _tokenAddress, address _pool, address _reps){
+        minimumVotingPeriod = 30; //(Around 5 minutes) voting is allowed on proposal
+        proposalIntializationThreshold = 1000000000000000000000000; //1000000 3DAO 1% of total supply
+        consul = msg.sender;
+        tokenAddress = _tokenAddress; //Address of 3DAO token
+        pool = _pool; //Address of proposal pool
+        reps = _reps; //Address of Represenatives
+        thisContract = address(this); //Governance Contract
+        resignBlock = add(block.number,60); //(10 minutes from launch)consul loses all special rights and system becomes truly decentralized.
+    }
 
+
+/*  REAL CONSTRUCTOR
     constructor(address _tokenAddress, address _pool, address _reps){
         minimumVotingPeriod = 60480; //(Around 7 days) voting is allowed on proposal
         proposalIntializationThreshold = 1000000000000000000000000; //1000000 3DAO 1% of total supply
@@ -89,8 +103,8 @@ contract Governance is GovernanceMath{
         thisContract = address(this); //Governance Contract
         resignBlock = add(block.number,1800000); //(6 months from launch)consul loses all special rights and system becomes truly decentralized.
     }
+*/
 
-  
     modifier onlyConsul(){
         require(msg.sender == consul);
         _;
@@ -102,7 +116,7 @@ contract Governance is GovernanceMath{
     }
     modifier onlyReps(address _address){
        require(IToken(tokenAddress).balanceOf(msg.sender) > 10000000000000000000000, "Not enough 3dao tokens");
-       require(IRepresentatives(reps).isRep(_address));               
+       require(IRepresentatives(reps).isRep(_address));
       _;
     }
     modifier onlyInitializedProposal(uint _proposal){
@@ -121,6 +135,7 @@ contract Governance is GovernanceMath{
       require(block.number > proposals[_proposal].endVoteBlock ,"Voting period has not ended");
       _;
     }
+
     function getMaxAvailiableTokens() public view returns (uint){
         return IPool(pool).getProposalTokenLimit();
     }
@@ -137,9 +152,23 @@ contract Governance is GovernanceMath{
         return IRepresentatives(reps).isRep(_address);
     }
 
+    function replenishPool() public onlyReps(msg.sender) returns(address){
+        uint supply = IPool(pool).getpoolSupply();
+        require(supply < 65);
+        ReplenishPool stakingPool = new ReplenishPool(
+            consul,
+            reps,
+            tokenAddress,
+            thisContract,
+            pool);
+
+            return address(stakingPool);
+    }
+
     function propose(string memory detailedDescription, uint256 _cost, uint _votePeriod) public onlyReps(msg.sender) returns (string memory,uint) {
         require((_cost) < getMaxAvailiableTokens(), "Proposal cost exceeds 2% of avaliable tokens");
         require(_votePeriod > minimumVotingPeriod, "Not enough time for potential voters to become aware of proposal");
+        uint iPoints = IToken(tokenAddress).balanceOf(msg.sender);
         address[] memory iVoted;
         proposalContractID = proposalContractID + 1;
         Proposal storage p = proposals[proposalContractID];
@@ -152,11 +181,14 @@ contract Governance is GovernanceMath{
             p.voteEnded = false;
             p.votePass = false;
             p.enacted = false;
-            p.initializationPoints = 0;
-            p.initialized = false;
+            p.initializationPoints = iPoints;
+            if(iPoints > proposalIntializationThreshold){
+            p.initialized = true;
+            }else{
+            p.initialized = false;}
             p.initializers = iVoted;
             p.active = false;
-        
+
             return("Proposal ID",proposalContractID);
     }
 
@@ -179,7 +211,7 @@ contract Governance is GovernanceMath{
       return ("1000000000000000000000000 required to initialize, Current initialization points: ", proposals[_proposal].initializationPoints);
         }
     }
-   
+
     function vote(uint _proposal, bool yes, bool no) public onlyReps(msg.sender) onlyInitializedProposal(_proposal) returns (string memory message){
        Proposal storage p = proposals[_proposal];
        require(!p.voters[msg.sender], "Only one vote per address");
@@ -210,11 +242,12 @@ contract Governance is GovernanceMath{
         return false;
         }
     }
-    
-    function veto(uint _proposal) public onlyConsul consulCheck(){
+
+    function override_vote(uint _proposal) public onlyConsul consulCheck(){
         uint yesVotes = proposals[_proposal].yesVotes;
         uint noVotes  = proposals[_proposal].noVotes;
-        require((div(yesVotes,noVotes)) < mul((div(2,3)),(add(yesVotes,noVotes)))," 66% majority overides DIGI authority");
+        require(yesVotes < mul((div(2,3)),(add(yesVotes,noVotes)))," 66% majority overides Consul authority");
+        require(noVotes  < mul((div(2,3)),(add(yesVotes,noVotes)))," 66% majority overides Consul authority");
         proposals[_proposal].votePass = false;
         proposals[_proposal].enacted = false;
         proposals[_proposal].voteEnded = true;
@@ -226,8 +259,8 @@ contract Governance is GovernanceMath{
         return _releaseBlock;
     }
 
-    function enactProposal(uint _proposal,uint _weeks,address _facilitator) public  
-        onlyProposalSponsor(_proposal) 
+    function enactProposal(uint _proposal,uint _weeks,address _facilitator) public
+        onlyProposalSponsor(_proposal)
         onlyNonEnactedProposals(_proposal) returns (address) {
         require(_weeks > 0," Proprosal needs at least 1 week to be completed");
         require(proposals[_proposal].votePass = true, "The vote did not pass");
@@ -257,7 +290,7 @@ contract Governance is GovernanceMath{
 
     function verfifyProposalContract(uint id, address contractAddress) public view returns (bool){
         require(proposalContracts[id-1] == contractAddress, "This contract can not be verified");
-        return true; 
+        return true;
     }
 }
 
@@ -309,7 +342,7 @@ contract ProposalContract is GovernanceMath{
     Sponsor [] sponsorArray;
 
     constructor(
-      uint _id,  
+      uint _id,
       address _proposer,
       uint _cost,
       address _facilitator,
@@ -380,16 +413,16 @@ contract ProposalContract is GovernanceMath{
         return IToken(tokenContract).balanceOf(thisContract);
     }
 
-    function SponsorProposalContract(uint _amount) public 
-        onlyVerifiedProposals(id, thisContract) 
-        onlyReps(msg.sender) 
-        onlyBeforeCutoff 
-        onlyAvailiableStake(_amount) 
-        onlyMaxContractValue(_amount) 
+    function SponsorProposalContract(uint _amount) public
+        onlyVerifiedProposals(id, thisContract)
+        onlyReps(msg.sender)
+        onlyBeforeCutoff
+        onlyAvailiableStake(_amount)
+        onlyMaxContractValue(_amount)
 
         returns (string memory message)
         {
-        
+
         require(_amount > 0,"Can't sponsor proposal with a 0 value");
         require(sponsors[msg.sender].balance == 0, "You have already sponsored this proposal");
         bool proposerBonus = false;
@@ -402,7 +435,7 @@ contract ProposalContract is GovernanceMath{
             s.isSponsor = true;
             s.stakebonus = proposerBonus;
             s.paid = false;
-    
+
         }else{
             s.sponsorAddress = msg.sender;
             s.balance = _amount;
@@ -412,14 +445,14 @@ contract ProposalContract is GovernanceMath{
         }
 
         sponsorArray.push(s);
-        
+
         currentStake = contractBalance() + _amount;
         uint fundsNeeded = safeSub(proposalCost*10**18 , currentStake);
         emit FundingNeeded(fundsNeeded, notificationDeadline);
         enabled = true;
 
         IToken(tokenContract).transferFrom(msg.sender,thisContract, _amount);
-        
+
         message = "Completion notification due by";
 
         return (message);
@@ -493,3 +526,54 @@ contract ProposalContract is GovernanceMath{
     }
 
 }
+
+contract ReplenishPool is GovernanceMath{
+    address thisContract;
+    address consul;
+
+    address public reps;
+    address public tokenContract;
+    address public governanceContract;
+    address public poolContract;
+
+    struct Staker{
+        address stakerAddress;
+        uint balance;
+    }
+
+    constructor(address _consul, address _reps, address _tokenContract, address _governanceContract, address _poolContract) {
+        thisContract = address(this);
+        consul = _consul;
+        reps = _reps;
+        tokenContract = _tokenContract;
+        governanceContract = _governanceContract;
+        poolContract = _poolContract;
+
+    }
+
+    mapping(address => Staker )  public stakers;
+    Staker [] stakerArray;
+
+    modifier onlyReps(address _address){
+        require(IRepresentatives(reps).isRep(_address),"You are not a rep");
+        _;}
+
+    function addStake(uint _amount) public onlyReps(msg.sender)returns (string memory message){
+        require(_amount > 0,"Can't stake a 0 value");
+        uint previousBalance = stakers[msg.sender].balance;
+
+        Staker storage s = stakers[msg.sender];
+        s.stakerAddress = msg.sender;
+        s.balance = previousBalance + _amount;
+
+        stakerArray.push(s);
+
+        IToken(tokenContract).transferFrom(msg.sender,thisContract, _amount);
+        message = "You have staked!";
+        return (message);
+
+    }
+
+}
+
+contract ElectSignortories is GovernanceMath{}
