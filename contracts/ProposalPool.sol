@@ -72,8 +72,6 @@ contract ProposalPool{
     }
 
     function getProposalTokenLimit() external view returns(uint){
-        //.02 * (InterfaceDigi(tokenContract).balanceOf(poolContract)**2) /initialpoolSupply
-        //.02 * fundStrength() * 10000
         uint availiableTokens = fundStrength() * 200;
         return availiableTokens*10**18;
     }
