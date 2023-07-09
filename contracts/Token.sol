@@ -33,13 +33,13 @@ contract TokenMath {
 
 contract Token is TokenMath {
     address public pool;
-    address consul;
+    address public consul;
 
     string public symbol;
     string public name;
 
     uint8 public decimals;
-    uint _totalSupply;
+    uint public _totalSupply;
     uint public _poolSupply;
     bool public _poolSupplySent;
 
@@ -52,19 +52,19 @@ contract Token is TokenMath {
         symbol = "3DAO";
         name = "3DaoToken";
         decimals = 18;
-        _totalSupply = 100_000_000e18; //100 million
-        _poolSupply = 20_000_000e18;  //20 million
+        _totalSupply = 100_000_000e18; 
+        _poolSupply = 20_000_000e18;  
         balances[msg.sender] = _totalSupply;
         consul = msg.sender;
         _poolSupplySent = false;
 
     }
     modifier onlyconsul(){
-        require(msg.sender == consul, "You are not the consul");
+        require(msg.sender == consul, "You are not consul");
         _;
     }
     modifier onlyNoPool(){
-        require(_poolSupplySent == false, "Pool supply already sent");
+        require(_poolSupplySent == false, "Pool is funded");
         _;
     }
     function activatePool(address _pool) public onlyconsul onlyNoPool{
