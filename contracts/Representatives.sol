@@ -12,7 +12,8 @@ contract Representatives {
     uint public representativeMin;
     uint public repMaturation;
     mapping(address => Representative )  public registeredReps;
-    address consul;
+    address public consul;
+    Representative [] public reps;
 
     struct Representative{
         address _rep;
@@ -26,6 +27,7 @@ contract Representatives {
         representativeMin = 10_000e18; // 10000 Digitrade
         tokenAddress = _tokenAddress;
         consul = msg.sender;
+        registerRep();
     }
 
     /*Real Constructor
@@ -34,6 +36,7 @@ contract Representatives {
         representativeMin = 10_000e18; // 10000 Digitrade
         tokenAddress = _tokenAddress;
         consul = msg.sender;
+        registerRep();
     }
     */
     modifier onlyConsul(){
@@ -41,7 +44,7 @@ contract Representatives {
         _;
     }
 
-    function getUnlockBlock(address _address) private view returns (uint){
+    function getUnlockBlock(address _address) public view returns (uint){
         return registeredReps[_address]._unlockBlock;
     }
 
@@ -51,16 +54,36 @@ contract Representatives {
         return true;
     }
 
-    function removeNonHodlers(address _address) public onlyConsul{
-       if(IToken(tokenAddress).balanceOf(_address) < representativeMin){
-        delete registeredReps[_address];
+    function removeNonHodlers() external{
+       for(uint256 i=0; i < reps.length; i++){
+        if(IToken(tokenAddress).balanceOf(reps[i]._rep) < representativeMin){
+        delete registeredReps[reps[i]._rep];
+        delete reps[i];
+        reps.pop();
+        }
        }
     }
 
+   
+
     function registerRep() public {
       require(IToken(tokenAddress).balanceOf(msg.sender) > representativeMin, "Balance under 10K DGT");
-      uint _unlockBlock = block.number + repMaturation;  //unlocks after 30 days or so
-      registeredReps[msg.sender] = Representative(msg.sender,block.number, _unlockBlock);
+      for(uint256 i=0; i < reps.length; i++){
+      require(msg.sender != reps[i]._rep, "Already a rep");}
+      uint _unlockBlock = block.number + repMaturation;  //unlocks after 7 days or so
+      Representative memory newRep = Representative(msg.sender,block.number, _unlockBlock);
+      registeredReps[msg.sender] = newRep;
+      reps.push(newRep);
+    }
+
+    function getRegisteredRepsSize() public view returns (uint) {
+        uint active;
+        for(uint256 i=0; i < reps.length; i++){
+                if(reps[i]._rep != 0x0000000000000000000000000000000000000000){
+                    active++;
+                }else{}
+        }
+        return active;
     }
 
 }
